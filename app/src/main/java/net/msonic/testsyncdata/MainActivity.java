@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public void btnAceptar(View view){
 
         SyncToClientTask task = new SyncToClientTask();
-        task.execute("0");
+        task.execute("product");
     }
 
     private class SyncToClientTask extends AsyncTask<String, Void, ResponseRest<ResponseList<List<Product>>>> {
@@ -36,9 +36,12 @@ public class MainActivity extends AppCompatActivity {
             SyncToClientProy loginProxy = new SyncToClientProy(MainActivity.this);
 
 
+            ProductDao productDao = new ProductDao();
+            productDao.context=MainActivity.this;
+            int value = productDao.lastServerCounter("product");
 
 
-            return loginProxy.list(Integer.parseInt(params[0]));
+            return loginProxy.list(value);
         }
 
         @Override
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
             if(response.status==0){
 
+                SyncToClientDbTask syncToClientDbTask = new SyncToClientDbTask();
+                syncToClientDbTask.execute(response);
 
             }else{
 
@@ -62,4 +67,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-}
+
+    private class SyncToClientDbTask extends AsyncTask<ResponseRest<ResponseList<List<Product>>>, Void, String> {
+
+        @Override
+        protected String doInBackground(ResponseRest<ResponseList<List<Product>>>... params) {
+
+            ResponseRest<ResponseList<List<Product>>> response = params[0];
+
+            ProductDao productDao = new ProductDao();
+            productDao.context=MainActivity.this;
+
+            productDao.updateCounter("product",response.response.counterServer);
+
+            return null;
+        }
+    }
+
+
+
+    }
