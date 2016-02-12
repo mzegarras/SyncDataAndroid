@@ -4,6 +4,7 @@ import net.msonic.testsyncdata.to.Product;
 
 import java.util.List;
 
+import retrofit.http.Body;
 import retrofit.http.POST;
 import retrofit.http.Path;
 
@@ -14,7 +15,7 @@ public interface ProductContract {
 
 
     @POST("/products/syncToClient/{counterServer}")
-    ResponseRest<ResponseList<List<Product>>> syncToClient(@Path("counterServer") int counterServer);
+    ResponseRest<ResponseList<List<Product>>> syncToClient(@Path("counterServer") int counterServer,@Body String data);
 
 
 }

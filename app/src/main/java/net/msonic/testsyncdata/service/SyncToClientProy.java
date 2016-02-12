@@ -36,7 +36,7 @@ public class SyncToClientProy {
     public ResponseRest<ResponseList<List<Product>>> list(int categoria){
         final ProductContract service = getRestAdapter().create(ProductContract.class);
 
-        return service.syncToClient(0);
+        return service.syncToClient(0,"");
 
     }
 

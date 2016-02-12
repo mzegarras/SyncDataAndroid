@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public void btnAceptar(View view){
 
         SyncToClientTask task = new SyncToClientTask();
-        task.doInBackground("0");
+        task.execute("0");
     }
 
     private class SyncToClientTask extends AsyncTask<String, Void, ResponseRest<ResponseList<List<Product>>>> {
