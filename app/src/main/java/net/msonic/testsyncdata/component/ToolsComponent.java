@@ -5,6 +5,7 @@ package net.msonic.testsyncdata.component;
  */
 
 
+import net.msonic.testsyncdata.MainActivity;
 import net.msonic.testsyncdata.module.ApplicationModule;
 import net.msonic.testsyncdata.module.ToolsApiModule;
 
@@ -16,6 +17,6 @@ import dagger.Component;
 @Component(modules = {ApplicationModule.class,ToolsApiModule.class})
 public interface ToolsComponent {
     // to update the fields in your activities
-    //void inject(MainActivity activity);
+    void inject(MainActivity activity);
     //void inject(MainActivityFragment activity);
 }
