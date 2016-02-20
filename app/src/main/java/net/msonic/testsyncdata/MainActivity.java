@@ -88,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(ResponseRest<ResponseList<List<Product>>>... params) {
 
             ResponseRest<ResponseList<List<Product>>> response = params[0];
-            productDao.updateCounter("product",response.response.counterServer);
+
+            productService.syncFromServer(response.response.counterServer,response.response.result);
+            //productDao.updateCounter("product",response.response.counterServer);
 
             return null;
         }
