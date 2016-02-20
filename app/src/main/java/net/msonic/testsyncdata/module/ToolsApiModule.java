@@ -21,7 +21,6 @@ import dagger.Provides;
 public class ToolsApiModule {
 
 
-
     @Provides
     @Singleton
     SharedPreferences providesSharedPreferences(CustomApplication application) {
@@ -41,7 +40,6 @@ public class ToolsApiModule {
         ProductDao productDao = new ProductDao(application);
         return productDao;
     }
-
 
 
     @Provides
