@@ -5,19 +5,32 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.contract.ResponseList;
 import net.msonic.testsyncdata.contract.ResponseRest;
+import net.msonic.testsyncdata.dao.ProductDao;
 import net.msonic.testsyncdata.service.SyncToClientProy;
 import net.msonic.testsyncdata.to.Product;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity {
+
+    @Inject
+    ProductDao productDao;
+
+    @Inject
+    ProductService productService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ((CustomApplication) getApplication()).getDiComponent().inject(this);
+
     }
 
 
@@ -35,10 +48,7 @@ public class MainActivity extends AppCompatActivity {
         protected ResponseRest<ResponseList<List<Product>>> doInBackground(String... params) {
             SyncToClientProy loginProxy = new SyncToClientProy(MainActivity.this);
 
-
-            ProductDao productDao = new ProductDao();
-            productDao.context=MainActivity.this;
-            int value = productDao.lastServerCounter("product");
+            int value = productService.lastServerCounter("product");
 
 
             return loginProxy.list(value);
@@ -74,10 +84,6 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(ResponseRest<ResponseList<List<Product>>>... params) {
 
             ResponseRest<ResponseList<List<Product>>> response = params[0];
-
-            ProductDao productDao = new ProductDao();
-            productDao.context=MainActivity.this;
-
             productDao.updateCounter("product",response.response.counterServer);
 
             return null;

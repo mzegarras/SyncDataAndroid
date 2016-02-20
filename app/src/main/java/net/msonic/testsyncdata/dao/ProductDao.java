@@ -1,18 +1,37 @@
-package net.msonic.testsyncdata;
+package net.msonic.testsyncdata.dao;
 
-import android.content.Context;
 import android.database.Cursor;
+
+import net.msonic.testsyncdata.CustomApplication;
+import net.msonic.testsyncdata.UtilDB;
+
+import javax.inject.Inject;
 
 /**
  * Created by manuelzegarra on 12/02/16.
  */
 public class ProductDao {
 
-    public Context context;
+
+    @Inject
+    UtilDB db;
+
+
+
+    CustomApplication application;
+
+
+    public ProductDao(CustomApplication application){
+        this.application = application;
+        this.application.getDiComponent().inject(this);
+    }
+
+
+
 
     public int lastServerCounter(String tableName){
 
-        UtilDB db = UtilDB.GetUtilDb(context);
+        //UtilDB db = UtilDB.GetUtilDb(context);
         String SQL = "SELECT value FROM counter_sever WHERE upper(tableName)=upper(?)";
 
         String[] parametros = new String[] { tableName};
@@ -35,7 +54,7 @@ public class ProductDao {
     }
 
     public void updateCounter(String tableName,int counterServer){
-        UtilDB db = UtilDB.GetUtilDb(context);
+        //UtilDB db = UtilDB.GetUtilDb(context);
         //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
 
         String SQL = "SELECT value FROM counter_sever WHERE upper(tableName)=upper(?)";

@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
 
 import net.msonic.testsyncdata.CustomApplication;
 import net.msonic.testsyncdata.UtilDB;
+import net.msonic.testsyncdata.bus.ProductService;
+import net.msonic.testsyncdata.dao.ProductDao;
 
 import javax.inject.Singleton;
 
@@ -22,17 +24,31 @@ public class ToolsApiModule {
 
     @Provides
     @Singleton
-        // Application reference must come from AppModule.class
     SharedPreferences providesSharedPreferences(CustomApplication application) {
         return PreferenceManager.getDefaultSharedPreferences(application);
     }
 
     @Provides
     @Singleton
-        // Application reference must come from AppModule.class
     UtilDB providesDatabase(CustomApplication application) {
         UtilDB databaseHelper = UtilDB.GetUtilDb(application);
         return databaseHelper;
+    }
+
+    @Provides
+    @Singleton
+    ProductDao productDao(CustomApplication application) {
+        ProductDao productDao = new ProductDao(application);
+        return productDao;
+    }
+
+
+
+    @Provides
+    @Singleton
+    ProductService productService(CustomApplication application) {
+        ProductService productService = new ProductService(application);
+        return productService;
     }
 
 }
