@@ -7,6 +7,9 @@ import net.msonic.testsyncdata.CustomApplication;
 import net.msonic.testsyncdata.UtilDB;
 import net.msonic.testsyncdata.to.Product;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 /**
@@ -34,7 +37,7 @@ public class ProductDao {
     public int lastServerCounter(String tableName){
 
         //UtilDB db = UtilDB.GetUtilDb(context);
-        final String SQL = "SELECT serverValue FROM counter_sever WHERE upper(tableName)=upper(?)";
+        final String SQL = "SELECT serverValue FROM counter_data WHERE upper(tableName)=upper(?)";
 
         String[] parametros = new String[] { tableName};
 
@@ -82,7 +85,7 @@ public class ProductDao {
     public int lastLocalCounter(String tableName){
 
         //UtilDB db = UtilDB.GetUtilDb(context);
-        final String SQL = "SELECT localValue FROM counter_sever WHERE upper(tableName)=upper(?)";
+        final String SQL = "SELECT localValue FROM counter_data WHERE upper(tableName)=upper(?)";
 
         String[] parametros = new String[] { tableName};
 
@@ -187,6 +190,37 @@ public class ProductDao {
         }
         cursor.close();
         return product;
+
+    }
+
+
+    public List<Product> list(int localCounter){
+
+        List<Product> productos = new ArrayList<Product>();
+
+        Product product = null;
+
+        final String SQL = "SELECT id,code,name,counterFromServer,counterToServer,isDeleted,timeStampUpdated FROM product WHERE counterToServer>?";
+        Cursor cursor = db.getDataBase().rawQuery(SQL,new String[]{String.valueOf(localCounter)});
+
+
+        while (cursor.moveToNext()) {
+            product = new Product();
+
+            product.id = cursor.getString(cursor.getColumnIndex("id"));
+            product.code = cursor.getString(cursor.getColumnIndex("code"));
+            product.name = cursor.getString(cursor.getColumnIndex("name"));
+            product.counterFromServer = cursor.getInt(cursor.getColumnIndex("counterFromServer"));
+            product.counterToServer = cursor.getInt(cursor.getColumnIndex("counterToServer"));
+            product.deleted = cursor.getInt(cursor.getColumnIndex("isDeleted"));
+            product.timeStampUpdated = cursor.getLong(cursor.getColumnIndex("timeStampUpdated"));
+
+            productos.add(product);
+        }
+
+        cursor.close();
+
+        return productos;
 
     }
 

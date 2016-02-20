@@ -51,6 +51,16 @@ public class ProductService {
     }
 
 
+    public void syncToServer() {
+        dbHelper.openDataBase();
+
+        int localCounter = productDao.lastLocalCounter("product");
+
+        productDao.list(localCounter);
+
+        dbHelper.close();
+
+    }
     public void syncFromServer(int lastServerCounter,ResponseRest<ResponseList<List<Product>>> response){
 
 
