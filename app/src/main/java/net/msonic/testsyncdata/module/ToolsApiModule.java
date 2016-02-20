@@ -17,6 +17,7 @@ import net.msonic.testsyncdata.service.SyncToClientProy;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -71,7 +72,8 @@ public class ToolsApiModule {
 
     @Provides
     @Singleton
-    RestAdapter provideRetrofit(RequestInterceptor requestInterceptor,JacksonConverter provideJsonConverter, OkHttpClient okHttpClient) {
+    @Named("server1")
+    RestAdapter provideRetrofit1(RequestInterceptor requestInterceptor,JacksonConverter provideJsonConverter, OkHttpClient okHttpClient) {
 
 
         RestAdapter restAdapter = new RestAdapter.Builder()
@@ -79,6 +81,23 @@ public class ToolsApiModule {
                 .setRequestInterceptor(requestInterceptor)
                 .setConverter(provideJsonConverter)
                 .setEndpoint("http://192.168.0.24:9002/api/v1/")
+                .setClient(new OkClient(okHttpClient))
+                .build();
+
+        return restAdapter;
+    }
+
+    @Provides
+    @Singleton
+    @Named("server2")
+    RestAdapter provideRetrofit2(RequestInterceptor requestInterceptor,JacksonConverter provideJsonConverter, OkHttpClient okHttpClient) {
+
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setRequestInterceptor(requestInterceptor)
+                .setConverter(provideJsonConverter)
+                .setEndpoint("http://192.168.0.24:9002/api/v2/")
                 .setClient(new OkClient(okHttpClient))
                 .build();
 

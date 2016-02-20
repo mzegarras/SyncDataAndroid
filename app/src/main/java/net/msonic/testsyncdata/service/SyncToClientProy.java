@@ -9,6 +9,7 @@ import net.msonic.testsyncdata.to.Product;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import retrofit.RestAdapter;
 
@@ -22,7 +23,7 @@ public class SyncToClientProy {
         application.getDiComponent().inject(this);
     }
 
-    @Inject RestAdapter restAdapter;
+    @Inject @Named("server1") RestAdapter restAdapter;
 
     public ResponseRest<ResponseList<List<Product>>> list(int counterServer){
         final ProductContract service = restAdapter.create(ProductContract.class);

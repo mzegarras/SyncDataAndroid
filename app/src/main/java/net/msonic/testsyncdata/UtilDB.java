@@ -18,9 +18,9 @@ public class UtilDB extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 	private String DB_PATH =null;
 	private Context mContext;
-	
-	
-	
+
+
+
 	public static UtilDB GetUtilDb(Context context){
 		
 		UtilDB dbHelper = new UtilDB(context);
