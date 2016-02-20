@@ -5,6 +5,8 @@ import android.util.Log;
 import net.msonic.testsyncdata.Common;
 import net.msonic.testsyncdata.CustomApplication;
 import net.msonic.testsyncdata.UtilDB;
+import net.msonic.testsyncdata.contract.ResponseList;
+import net.msonic.testsyncdata.contract.ResponseRest;
 import net.msonic.testsyncdata.dao.ProductDao;
 import net.msonic.testsyncdata.to.Product;
 
@@ -49,12 +51,13 @@ public class ProductService {
     }
 
 
-    public void syncFromServer(int counter_lastsync,List<Product> productos){
+    public void syncFromServer(int lastServerCounter,ResponseRest<ResponseList<List<Product>>> response){
 
 
         dbHelper.openDataBase();
+        int localCounter = productDao.lastLocalCounter("product");
 
-        for (Product objectToSync:productos){
+        for (Product objectToSync:response.response.result){
 
 
             Product productLocal = productDao.byId(objectToSync.id);
@@ -70,7 +73,7 @@ public class ProductService {
                     }
 
                     // check for conflict (object updated locally since last sync to server)
-                    if (productLocal.counterFromServer > counter_lastsync) {
+                    if (productLocal.counterFromServer > lastServerCounter) {
 
                         if (conflictHandling == Common.ConflictHandling.SERVERPRIORITY.getValue()) {
                             productLocal.name = objectToSync.name;
@@ -95,10 +98,17 @@ public class ProductService {
                 }
 
             }else{
-                objectToSync.counterFromServer = counter_lastsync;
+                objectToSync.counterFromServer = localCounter; //do not increase $this->counter because no change that must be synced back to server
                 productDao.insert(objectToSync);
             }
         }
+
+
+        /*
+        if (result.getStatuscode() == 1) {
+            this.servercounter_lastsync = result.getServercounter();
+        }*/
+        productDao.updateCounterServer("product",response.response.counterServer);
 
         dbHelper.close();
     }

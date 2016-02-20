@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
             ResponseRest<ResponseList<List<Product>>> response = params[0];
 
-            productService.syncFromServer(response.response.counterServer,response.response.result);
-            //productDao.updateCounter("product",response.response.counterServer);
+            productService.syncFromServer(response.response.counterServer,response);
+            //productDao.updateCounterServer("product",response.response.counterServer);
 
             return null;
         }

@@ -34,7 +34,7 @@ public class ProductDao {
     public int lastServerCounter(String tableName){
 
         //UtilDB db = UtilDB.GetUtilDb(context);
-        final String SQL = "SELECT value FROM counter_sever WHERE upper(tableName)=upper(?)";
+        final String SQL = "SELECT serverValue FROM counter_sever WHERE upper(tableName)=upper(?)";
 
         String[] parametros = new String[] { tableName};
 
@@ -44,7 +44,7 @@ public class ProductDao {
         int counter=0;
 
         if(cursor.moveToNext()){
-            counter = cursor.getInt(cursor.getColumnIndex("value"));
+            counter = cursor.getInt(cursor.getColumnIndex("serverValue"));
         }
 
         cursor.close();
@@ -54,11 +54,11 @@ public class ProductDao {
 
     }
 
-    public void updateCounter(String tableName,int counterServer){
+    public void updateCounterServer(String tableName, int counterServer){
         //UtilDB db = UtilDB.GetUtilDb(context);
         //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
 
-        String SQL = "SELECT value FROM counter_sever WHERE upper(tableName)=upper(?)";
+        String SQL = "SELECT serverValue FROM counter_data WHERE upper(tableName)=upper(?)";
         String[] parametros = new String[] { tableName,String.valueOf(counterServer)};
 
 
@@ -70,9 +70,57 @@ public class ProductDao {
         }
 
         if(existe){
-            SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
+            SQL = "UPDATE counter_data SET serverValue=? WHERE upper(tableName)=upper(?)";
         }else{
-            SQL = "insert into counter_sever (tableName,value) values (upper(?),?)";
+            SQL = "insert into counter_data (tableName,serverValue) values (upper(?),?)";
+        }
+
+        db.getDataBase().execSQL(SQL,parametros);
+
+    }
+
+    public int lastLocalCounter(String tableName){
+
+        //UtilDB db = UtilDB.GetUtilDb(context);
+        final String SQL = "SELECT localValue FROM counter_sever WHERE upper(tableName)=upper(?)";
+
+        String[] parametros = new String[] { tableName};
+
+
+        Cursor cursor = db.getDataBase().rawQuery(SQL, parametros);
+
+        int counter=0;
+
+        if(cursor.moveToNext()){
+            counter = cursor.getInt(cursor.getColumnIndex("localValue"));
+        }
+
+        cursor.close();
+
+
+        return counter;
+
+    }
+
+    public void updateCounterLocal(String tableName, int counterLocal){
+        //UtilDB db = UtilDB.GetUtilDb(context);
+        //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
+
+        String SQL = "SELECT localValue FROM counter_data WHERE upper(tableName)=upper(?)";
+        String[] parametros = new String[] { tableName,String.valueOf(counterLocal)};
+
+
+        Cursor cursor = db.getDataBase().rawQuery(SQL, new String[] { tableName});
+
+        boolean existe=false;
+        if(cursor.moveToNext()){
+            existe = true;
+        }
+
+        if(existe){
+            SQL = "UPDATE counter_data SET localValue=? WHERE upper(tableName)=upper(?)";
+        }else{
+            SQL = "insert into counter_data (tableName,localValue) values (upper(?),?)";
         }
 
         db.getDataBase().execSQL(SQL,parametros);
