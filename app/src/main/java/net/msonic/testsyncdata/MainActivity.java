@@ -41,12 +41,16 @@ public class MainActivity extends AppCompatActivity {
         task.execute("product");
     }
 
+    @Inject SyncToClientProy loginProxy;
+
     private class SyncToClientTask extends AsyncTask<String, Void, ResponseRest<ResponseList<List<Product>>>> {
+
+
 
 
         @Override
         protected ResponseRest<ResponseList<List<Product>>> doInBackground(String... params) {
-            SyncToClientProy loginProxy = new SyncToClientProy(MainActivity.this);
+
 
             int value = productService.lastServerCounter("product");
 
