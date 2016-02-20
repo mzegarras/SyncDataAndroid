@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import com.squareup.okhttp.OkHttpClient;
 
 import net.msonic.testsyncdata.CustomApplication;
+import net.msonic.testsyncdata.R;
 import net.msonic.testsyncdata.UtilDB;
 import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.dao.ProductDao;
@@ -73,14 +74,14 @@ public class ToolsApiModule {
     @Provides
     @Singleton
     @Named("server1")
-    RestAdapter provideRetrofit1(RequestInterceptor requestInterceptor,JacksonConverter provideJsonConverter, OkHttpClient okHttpClient) {
+    RestAdapter provideRetrofit1(CustomApplication application,RequestInterceptor requestInterceptor,JacksonConverter provideJsonConverter, OkHttpClient okHttpClient) {
 
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setRequestInterceptor(requestInterceptor)
                 .setConverter(provideJsonConverter)
-                .setEndpoint("http://192.168.0.24:9002/api/v1/")
+                .setEndpoint(application.getString(R.string.url_host_1))
                 .setClient(new OkClient(okHttpClient))
                 .build();
 
@@ -90,14 +91,14 @@ public class ToolsApiModule {
     @Provides
     @Singleton
     @Named("server2")
-    RestAdapter provideRetrofit2(RequestInterceptor requestInterceptor,JacksonConverter provideJsonConverter, OkHttpClient okHttpClient) {
+    RestAdapter provideRetrofit2(CustomApplication application,RequestInterceptor requestInterceptor,JacksonConverter provideJsonConverter, OkHttpClient okHttpClient) {
 
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setRequestInterceptor(requestInterceptor)
                 .setConverter(provideJsonConverter)
-                .setEndpoint("http://192.168.0.24:9002/api/v2/")
+                .setEndpoint(application.getString(R.string.url_host_2))
                 .setClient(new OkClient(okHttpClient))
                 .build();
 
