@@ -64,9 +64,9 @@ public class ToolsApiModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient() {
+    OkHttpClient provideOkHttpClient(CustomApplication application) {
         OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
+        okHttpClient.setReadTimeout(application.getResources().getInteger(R.integer.timeout_services), TimeUnit.SECONDS);
         okHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
         return okHttpClient;
     }
