@@ -81,7 +81,7 @@ public class ProductDao {
 
     public void insert(Product product){
 
-        final String SQL = "INSERT INTO product(id,code,name,counterFromServer,counterToServer,isDeleted) VALUES (?,?,?,?,?,?)";
+        final String SQL = "INSERT INTO product(id,code,name,counterFromServer,counterToServer,isDeleted,timeStampUpdated) VALUES (?,?,?,?,?,?,?)";
 
 
         final SQLiteStatement statementInsert = db.getDataBase().compileStatement(SQL);
@@ -94,6 +94,7 @@ public class ProductDao {
         statementInsert.bindLong(++index, product.counterFromServer);
         statementInsert.bindLong(++index, product.counterToServer);
         statementInsert.bindLong(++index, product.deleted);
+        statementInsert.bindLong(++index, product.timeStampUpdated);
 
         statementInsert.executeUpdateDelete();
 
@@ -102,7 +103,7 @@ public class ProductDao {
 
     public void update(Product product){
 
-        final String SQL = "UPDATE product SET name=?,counterFromServer=?,counterToServer=?,isDeleted=? WHERE ID=?";
+        final String SQL = "UPDATE product SET name=?,counterFromServer=?,counterToServer=?,isDeleted=?,timeStampUpdated=? WHERE ID=?";
 
         final SQLiteStatement statementInsert = db.getDataBase().compileStatement(SQL);
         statementInsert.clearBindings();
@@ -112,6 +113,7 @@ public class ProductDao {
         statementInsert.bindLong(++index, product.counterFromServer);
         statementInsert.bindLong(++index, product.counterToServer);
         statementInsert.bindLong(++index, product.deleted);
+        statementInsert.bindLong(++index, product.timeStampUpdated);
         statementInsert.bindString(++index, product.id);
         statementInsert.executeUpdateDelete();
 
@@ -121,7 +123,7 @@ public class ProductDao {
 
         Product product = null;
 
-        final String SQL = "SELECT id,code,name,counterFromServer,counterToServer,isDeleted FROM product WHERE ID=?";
+        final String SQL = "SELECT id,code,name,counterFromServer,counterToServer,isDeleted,timeStampUpdated FROM product WHERE ID=?";
         Cursor cursor = db.getDataBase().rawQuery(SQL,new String[]{id});
         if(cursor.moveToNext()) {
             product = new Product();
@@ -132,6 +134,7 @@ public class ProductDao {
             product.counterFromServer = cursor.getInt(cursor.getColumnIndex("counterFromServer"));
             product.counterToServer = cursor.getInt(cursor.getColumnIndex("counterToServer"));
             product.deleted = cursor.getInt(cursor.getColumnIndex("isDeleted"));
+            product.timeStampUpdated = cursor.getLong(cursor.getColumnIndex("timeStampUpdated"));
 
         }
         cursor.close();

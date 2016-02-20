@@ -79,13 +79,12 @@ public class ProductService {
                             // no change to local object
                         } else if (conflictHandling == Common.ConflictHandling.TIMESTAMPPRIORITY.getValue()) {
 
-                            /*
-                            if (objectToSync.getTimeStampUpdated() > object.getTimeStampUpdated()) {
-								object.setValue(objectToSync.getValue());
-								object.setDelete(objectToSync.isDelete());
-								object.setTimeStampUpdated(System.currentTimeMillis() / 1000L);
+                            if (productLocal.timeStampUpdated > objectToSync.timeStampUpdated) {
+                                productLocal.name = objectToSync.name;
+                                productLocal.deleted = objectToSync.deleted;
+                                productLocal.timeStampUpdated = System.currentTimeMillis() / 1000L;
 							}
-                            * */
+
                         }
                     } else { // no conflict: update object locally
                         productLocal.name = objectToSync.name;
