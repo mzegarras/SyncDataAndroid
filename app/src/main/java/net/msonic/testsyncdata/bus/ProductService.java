@@ -54,8 +54,6 @@ public class ProductService {
 
         dbHelper.openDataBase();
 
-        boolean objectExists = false;
-
         for (Product objectToSync:productos){
 
 
@@ -72,7 +70,7 @@ public class ProductService {
                     }
 
                     // check for conflict (object updated locally since last sync to server)
-                    if (productLocal.counterUpdate > counter_lastsync) {
+                    if (productLocal.counterFromServer > counter_lastsync) {
 
                         if (conflictHandling == Common.ConflictHandling.SERVERPRIORITY.getValue()) {
                             productLocal.name = objectToSync.name;
@@ -98,7 +96,7 @@ public class ProductService {
                 }
 
             }else{
-                objectToSync.counterUpdate = counter_lastsync;
+                objectToSync.counterFromServer = counter_lastsync;
                 productDao.insert(objectToSync);
             }
         }

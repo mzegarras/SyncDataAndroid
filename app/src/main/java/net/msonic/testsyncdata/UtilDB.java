@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,8 +39,10 @@ public class UtilDB extends SQLiteOpenHelper {
 	public UtilDB(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		mContext = context;
-		DB_PATH =  "/data/data/"+ mContext.getPackageName()+"/databases/";
+		//DB_PATH =  "/data/data/"+ mContext.getPackageName()+"/databases/";
 
+		final String primaryStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+		DB_PATH = primaryStoragePath + "/";
 	}
 	
 	public boolean isDataBaseExist() {

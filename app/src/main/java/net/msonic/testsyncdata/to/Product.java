@@ -9,8 +9,10 @@ public class Product {
     public String id;
     public String code;
     public String name;
-    public int counterUpdate;
+    public int counterFromServer; // value of server counter when last sync from server was done ($this->syncFromServer)
+    public int counterToServer; // value of $this->counter when last sync to server was done ($this->syncToServer)
     public int deleted;
+    public long timeStampUpdated;
 
 
 }
