@@ -9,6 +9,7 @@ import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.contract.ResponseList;
 import net.msonic.testsyncdata.contract.ResponseRest;
 import net.msonic.testsyncdata.dao.ProductDao;
+import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.service.SyncToClientProy;
 import net.msonic.testsyncdata.to.Product;
 
@@ -59,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Inject SyncToClientProy loginProxy;
-
+    @Inject SyncToClientProy syncToClientProy;
+    @Inject
+    SyncFromClienteProxy syncFromClienteProxy;
     private class SyncToClientTask extends AsyncTask<String, Void, ResponseRest<ResponseList<List<Product>>>> {
 
 
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             int lastServerCounter = productService.lastServerCounter("product");
 
 
-            return loginProxy.list(lastServerCounter);
+            return syncToClientProy.list(lastServerCounter);
         }
 
         @Override
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
 
-            productService.syncToServer();
+            syncFromClienteProxy.list(productService.syncToServer());
 
             return null;
         }

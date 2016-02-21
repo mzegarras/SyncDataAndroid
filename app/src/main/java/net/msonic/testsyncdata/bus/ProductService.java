@@ -51,14 +51,16 @@ public class ProductService {
     }
 
 
-    public void syncToServer() {
+    public List<Product> syncToServer() {
         dbHelper.openDataBase();
 
         int counterLastSync = productDao.counterLastSync("product");
 
-        productDao.list(counterLastSync);
+        List<Product> products = productDao.list(counterLastSync);
 
         dbHelper.close();
+
+        return products;
 
     }
 

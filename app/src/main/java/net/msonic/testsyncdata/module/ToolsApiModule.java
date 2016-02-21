@@ -14,6 +14,7 @@ import net.msonic.testsyncdata.R;
 import net.msonic.testsyncdata.UtilDB;
 import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.dao.ProductDao;
+import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.service.SyncToClientProy;
 
 import java.util.concurrent.TimeUnit;
@@ -141,5 +142,13 @@ public class ToolsApiModule {
         SyncToClientProy syncToClientProy = new SyncToClientProy(application);
         return syncToClientProy;
     }
+
+    @Provides
+    @Singleton
+    SyncFromClienteProxy syncFromClienteProxy(CustomApplication application) {
+        SyncFromClienteProxy syncFromClienteProxy = new SyncFromClienteProxy(application);
+        return syncFromClienteProxy;
+    }
+
 
 }

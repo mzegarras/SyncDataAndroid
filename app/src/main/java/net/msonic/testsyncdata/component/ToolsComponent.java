@@ -10,6 +10,7 @@ import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.dao.ProductDao;
 import net.msonic.testsyncdata.module.ApplicationModule;
 import net.msonic.testsyncdata.module.ToolsApiModule;
+import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.service.SyncToClientProy;
 
 import javax.inject.Singleton;
@@ -28,6 +29,8 @@ public interface ToolsComponent {
     void inject(ProductDao productDao);
 
     void inject(SyncToClientProy syncToClientProy);
+    void inject(SyncFromClienteProxy syncFromClienteProxy);
+
 
 
 
