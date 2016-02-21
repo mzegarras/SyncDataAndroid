@@ -54,9 +54,9 @@ public class ProductService {
     public void syncToServer() {
         dbHelper.openDataBase();
 
-        int localCounter = productDao.lastLocalCounter("product");
+        int lastServerCounter = productDao.lastServerCounter("product");
 
-        productDao.list(localCounter);
+        productDao.list(lastServerCounter);
 
         dbHelper.close();
 
@@ -158,6 +158,39 @@ public class ProductService {
 
     }
 
+
+    public void insertFromClient(Product product){
+        dbHelper.openDataBase();
+        int updateLocalCounter = productDao.lastUpdateCounter("product");
+        updateLocalCounter +=1;
+        product.counterUpdate = updateLocalCounter;
+        productDao.insertFromClient(product);
+
+        productDao.updateCounterUpdate("product",updateLocalCounter);
+        dbHelper.close();
+    }
+
+
+    public void updateFromClient(Product product){
+        dbHelper.openDataBase();
+        int updateLocalCounter = productDao.lastUpdateCounter("product");
+        updateLocalCounter +=1;
+        product.counterUpdate = updateLocalCounter;
+
+        productDao.updateFromClient(product);
+        productDao.updateCounterUpdate("product",updateLocalCounter);
+        dbHelper.close();
+    }
+
+    public void deleteFromClient(Product product){
+        dbHelper.openDataBase();
+        int updateLocalCounter = productDao.lastUpdateCounter("product");
+        updateLocalCounter +=1;
+        product.counterUpdate = updateLocalCounter;
+        productDao.deleteFromClient(product);
+        productDao.updateCounterUpdate("product",updateLocalCounter);
+        dbHelper.close();
+    }
 
 
 }

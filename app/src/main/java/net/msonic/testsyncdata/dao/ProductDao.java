@@ -62,7 +62,7 @@ public class ProductDao {
         //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
 
         String SQL = "SELECT updateValue FROM counter_data WHERE upper(tableName)=upper(?)";
-        String[] parametros = new String[] { tableName,String.valueOf(counterServer)};
+
 
 
         Cursor cursor = db.getDataBase().rawQuery(SQL, new String[] { tableName});
@@ -75,8 +75,10 @@ public class ProductDao {
         if(existe){
             SQL = "UPDATE counter_data SET updateValue=? WHERE upper(tableName)=upper(?)";
         }else{
-            SQL = "insertFromServer into counter_data (tableName,updateValue) values (upper(?),?)";
+            SQL = "insert into counter_data (updateValue,tableName) values (?,upper(?))";
         }
+
+        String[] parametros = new String[] { String.valueOf(counterServer),tableName};
 
         db.getDataBase().execSQL(SQL,parametros);
 
@@ -111,7 +113,7 @@ public class ProductDao {
         //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
 
         String SQL = "SELECT serverValue FROM counter_data WHERE upper(tableName)=upper(?)";
-        String[] parametros = new String[] { tableName,String.valueOf(counterServer)};
+
 
 
         Cursor cursor = db.getDataBase().rawQuery(SQL, new String[] { tableName});
@@ -124,8 +126,10 @@ public class ProductDao {
         if(existe){
             SQL = "UPDATE counter_data SET serverValue=? WHERE upper(tableName)=upper(?)";
         }else{
-            SQL = "insert into counter_data (tableName,serverValue) values (upper(?),?)";
+            SQL = "insert into counter_data (serverValue,tableName) values (?,upper(?))";
         }
+
+        String[] parametros = new String[] { String.valueOf(counterServer),tableName};
 
         db.getDataBase().execSQL(SQL,parametros);
 
@@ -159,7 +163,7 @@ public class ProductDao {
         //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
 
         String SQL = "SELECT localValue FROM counter_data WHERE upper(tableName)=upper(?)";
-        String[] parametros = new String[] { tableName,String.valueOf(counterLocal)};
+
 
 
         Cursor cursor = db.getDataBase().rawQuery(SQL, new String[] { tableName});
@@ -172,9 +176,10 @@ public class ProductDao {
         if(existe){
             SQL = "UPDATE counter_data SET localValue=? WHERE upper(tableName)=upper(?)";
         }else{
-            SQL = "insertFromServer into counter_data (tableName,localValue) values (upper(?),?)";
+            SQL = "insert counter_data into counter_data (localValue,tableName) values (?,upper(?))";
         }
 
+        String[] parametros = new String[] { tableName,String.valueOf(counterLocal)};
         db.getDataBase().execSQL(SQL,parametros);
 
     }
@@ -247,6 +252,7 @@ public class ProductDao {
 
         Product product = null;
 
+        // object changed on client since last sync to server ?
         final String SQL = "SELECT id,code,name,counterLastUpdate,isDeleted,timeStampUpdated FROM product WHERE counterLastUpdate>?";
         Cursor cursor = db.getDataBase().rawQuery(SQL,new String[]{String.valueOf(localCounter)});
 
@@ -279,7 +285,7 @@ public class ProductDao {
 
         if(product.id==null){
             UUID uuid = UUID.randomUUID();
-            product.id = uuid.toString();
+            product.id = uuid.toString().replace("-","").toUpperCase();
         }
 
         product.timeStampUpdated = System.currentTimeMillis()/1000L;

@@ -41,6 +41,17 @@ public class MainActivity extends AppCompatActivity {
         task.execute("product");
     }
 
+
+
+    public void btnAdd(View view){
+        Product p = new Product();
+        p.name="Product2";
+        p.code="00002";
+
+        productService.insertFromClient(p);
+
+    }
+
     @Inject SyncToClientProy loginProxy;
 
     private class SyncToClientTask extends AsyncTask<String, Void, ResponseRest<ResponseList<List<Product>>>> {
@@ -89,7 +100,10 @@ public class MainActivity extends AppCompatActivity {
 
             ResponseRest<ResponseList<List<Product>>> response = params[0];
 
+
+            //DESCARGAR AL Cliente
             productService.syncFromServer(response.response.counterServer,response);
+
             //productService.syncToServer();
 
             //productDao.updateCounterServer("product",response.response.counterServer);
@@ -99,5 +113,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private class SyncClientToSeever extends AsyncTask<Void, Void, String> {
+
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            productService.syncToServer();
+
+            return null;
+        }
+
+
+
+
+
+
 
     }
+
+
+
+
+}
