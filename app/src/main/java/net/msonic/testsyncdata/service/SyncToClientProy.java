@@ -25,10 +25,10 @@ public class SyncToClientProy {
 
     @Inject @Named("server1") RestAdapter restAdapter;
 
-    public ResponseRest<ResponseList<List<Product>>> list(int counterServer){
+    public ResponseRest<ResponseList<List<Product>>> list(int lastServerCounter){
         final ProductContract service = restAdapter.create(ProductContract.class);
 
-        return service.syncToClient(counterServer,"");
+        return service.syncToClient(lastServerCounter,"");
 
     }
 

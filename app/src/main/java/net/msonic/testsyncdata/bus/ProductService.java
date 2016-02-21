@@ -40,9 +40,9 @@ public class ProductService {
         int counter = -1;
         try{
             dbHelper.openDataBase();
-            counter = productDao.lastServerCounter(tableName);
+            counter = productDao.serverCounterLastSync(tableName);
         } catch (Exception ex){
-            Log.e(TAG, "lastServerCounter", ex);
+            Log.e(TAG, "serverCounterLastSync", ex);
         } finally {
             dbHelper.close();
         }
@@ -54,9 +54,9 @@ public class ProductService {
     public void syncToServer() {
         dbHelper.openDataBase();
 
-        int lastServerCounter = productDao.lastServerCounter("product");
+        int counterLastSync = productDao.counterLastSync("product");
 
-        productDao.list(lastServerCounter);
+        productDao.list(counterLastSync);
 
         dbHelper.close();
 
@@ -66,9 +66,12 @@ public class ProductService {
     public void syncFromServer(int lastServerCounter,ResponseRest<ResponseList<List<Product>>> response){
 
 
+
+
+
         dbHelper.openDataBase();
-        int counter_lastsync = productDao.lastLocalCounter("product");
-        int updateLocalCounter = productDao.lastUpdateCounter("product");
+        int counter_lastsync = productDao.counterLastSync("product");
+        int counter = productDao.counter("product");
 
         for (Product objectToSync:response.response.result){
 
@@ -111,7 +114,7 @@ public class ProductService {
                 }
 
             }else{
-                objectToSync.counterUpdate = updateLocalCounter; //do not increase $this->counter because no change that must be synced back to server
+                objectToSync.counterUpdate = counter; //do not increase $this->counter because no change that must be synced back to server
                 productDao.insertFromServer(objectToSync);
             }
         }
@@ -121,7 +124,7 @@ public class ProductService {
         if (result.getStatuscode() == 1) {
             this.servercounter_lastsync = result.getServercounter();
         }*/
-        productDao.updateCounterServer("product",response.response.counterServer);
+        productDao.serverCounterLastSyncUpdate("product",response.response.counterServer);
 
         dbHelper.close();
     }
@@ -144,8 +147,8 @@ public class ProductService {
     public void display() {
         System.out.println("----------------------------------------");
 
-        int localCounter = productDao.lastLocalCounter("product");
-        int serverCounter = productDao.lastServerCounter("product");
+        int localCounter = productDao.counterLastSync("product");
+        int serverCounter = productDao.serverCounterLastSync("product");
 
         Log.d(TAG, String.format("State of client: name: %s - counter: %s - counter last sync: %s - - Server counter last sync:%s",
                 "Android",
@@ -161,34 +164,34 @@ public class ProductService {
 
     public void insertFromClient(Product product){
         dbHelper.openDataBase();
-        int updateLocalCounter = productDao.lastUpdateCounter("product");
+        int updateLocalCounter = productDao.counter("product");
         updateLocalCounter +=1;
         product.counterUpdate = updateLocalCounter;
         productDao.insertFromClient(product);
 
-        productDao.updateCounterUpdate("product",updateLocalCounter);
+        productDao.counterUpdate("product",updateLocalCounter);
         dbHelper.close();
     }
 
 
     public void updateFromClient(Product product){
         dbHelper.openDataBase();
-        int updateLocalCounter = productDao.lastUpdateCounter("product");
+        int updateLocalCounter = productDao.counter("product");
         updateLocalCounter +=1;
         product.counterUpdate = updateLocalCounter;
 
         productDao.updateFromClient(product);
-        productDao.updateCounterUpdate("product",updateLocalCounter);
+        productDao.counterUpdate("product",updateLocalCounter);
         dbHelper.close();
     }
 
     public void deleteFromClient(Product product){
         dbHelper.openDataBase();
-        int updateLocalCounter = productDao.lastUpdateCounter("product");
+        int updateLocalCounter = productDao.counter("product");
         updateLocalCounter +=1;
         product.counterUpdate = updateLocalCounter;
         productDao.deleteFromClient(product);
-        productDao.updateCounterUpdate("product",updateLocalCounter);
+        productDao.counterUpdate("product",updateLocalCounter);
         dbHelper.close();
     }
 

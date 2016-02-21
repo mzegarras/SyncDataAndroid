@@ -34,10 +34,10 @@ public class ProductDao {
 
 
 
-    public int lastUpdateCounter(String tableName){
+    public int counter(String tableName){
 
         //UtilDB db = UtilDB.GetUtilDb(context);
-        final String SQL = "SELECT updateValue FROM counter_data WHERE upper(tableName)=upper(?)";
+        final String SQL = "SELECT counter FROM counter_data WHERE upper(tableName)=upper(?)";
 
         String[] parametros = new String[] { tableName};
 
@@ -47,7 +47,7 @@ public class ProductDao {
         int counter=0;
 
         if(cursor.moveToNext()){
-            counter = cursor.getInt(cursor.getColumnIndex("updateValue"));
+            counter = cursor.getInt(cursor.getColumnIndex("counter"));
         }
 
         cursor.close();
@@ -57,11 +57,11 @@ public class ProductDao {
 
     }
 
-    public void updateCounterUpdate(String tableName, int counterServer){
+    public void counterUpdate(String tableName, int counterServer){
         //UtilDB db = UtilDB.GetUtilDb(context);
         //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
 
-        String SQL = "SELECT updateValue FROM counter_data WHERE upper(tableName)=upper(?)";
+        String SQL = "SELECT counter FROM counter_data WHERE upper(tableName)=upper(?)";
 
 
 
@@ -73,9 +73,9 @@ public class ProductDao {
         }
 
         if(existe){
-            SQL = "UPDATE counter_data SET updateValue=? WHERE upper(tableName)=upper(?)";
+            SQL = "UPDATE counter_data SET counter=? WHERE upper(tableName)=upper(?)";
         }else{
-            SQL = "insert into counter_data (updateValue,tableName) values (?,upper(?))";
+            SQL = "insert into counter_data (counter,tableName) values (?,upper(?))";
         }
 
         String[] parametros = new String[] { String.valueOf(counterServer),tableName};
@@ -85,10 +85,10 @@ public class ProductDao {
     }
 
 
-    public int lastServerCounter(String tableName){
+    public int serverCounterLastSync(String tableName){
 
         //UtilDB db = UtilDB.GetUtilDb(context);
-        final String SQL = "SELECT ifnull(serverValue,0) as serverValue  FROM counter_data WHERE upper(tableName)=upper(?)";
+        final String SQL = "SELECT ifnull(serverCounterLastSync,0) as serverValue  FROM counter_data WHERE upper(tableName)=upper(?)";
 
         String[] parametros = new String[] { tableName};
 
@@ -98,7 +98,7 @@ public class ProductDao {
         int counter=0;
 
         if(cursor.moveToNext()){
-            counter = cursor.getInt(cursor.getColumnIndex("serverValue"));
+            counter = cursor.getInt(cursor.getColumnIndex("serverCounterLastSync"));
         }
 
         cursor.close();
@@ -108,11 +108,13 @@ public class ProductDao {
 
     }
 
-    public void updateCounterServer(String tableName, int counterServer){
+
+
+    public void serverCounterLastSyncUpdate(String tableName, int counterServer){
         //UtilDB db = UtilDB.GetUtilDb(context);
         //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
 
-        String SQL = "SELECT serverValue FROM counter_data WHERE upper(tableName)=upper(?)";
+        String SQL = "SELECT serverCounterLastSync FROM counter_data WHERE upper(tableName)=upper(?)";
 
 
 
@@ -124,9 +126,9 @@ public class ProductDao {
         }
 
         if(existe){
-            SQL = "UPDATE counter_data SET serverValue=? WHERE upper(tableName)=upper(?)";
+            SQL = "UPDATE counter_data SET serverCounterLastSync=? WHERE upper(tableName)=upper(?)";
         }else{
-            SQL = "insert into counter_data (serverValue,tableName) values (?,upper(?))";
+            SQL = "insert into counter_data (serverCounterLastSync,tableName) values (?,upper(?))";
         }
 
         String[] parametros = new String[] { String.valueOf(counterServer),tableName};
@@ -135,10 +137,10 @@ public class ProductDao {
 
     }
 
-    public int lastLocalCounter(String tableName){
+    public int counterLastSync(String tableName){
 
         //UtilDB db = UtilDB.GetUtilDb(context);
-        final String SQL = "SELECT localValue FROM counter_data WHERE upper(tableName)=upper(?)";
+        final String SQL = "SELECT counterLastSync FROM counter_data WHERE upper(tableName)=upper(?)";
 
         String[] parametros = new String[] { tableName};
 
@@ -148,7 +150,7 @@ public class ProductDao {
         int counter=0;
 
         if(cursor.moveToNext()){
-            counter = cursor.getInt(cursor.getColumnIndex("localValue"));
+            counter = cursor.getInt(cursor.getColumnIndex("counterLastSync"));
         }
 
         cursor.close();
@@ -158,11 +160,11 @@ public class ProductDao {
 
     }
 
-    public void updateCounterLocal(String tableName, int counterLocal){
+    public void counterLastSyncUpdate(String tableName, int counterLocal){
         //UtilDB db = UtilDB.GetUtilDb(context);
         //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
 
-        String SQL = "SELECT localValue FROM counter_data WHERE upper(tableName)=upper(?)";
+        String SQL = "SELECT counterLastSync FROM counter_data WHERE upper(tableName)=upper(?)";
 
 
 
@@ -174,9 +176,9 @@ public class ProductDao {
         }
 
         if(existe){
-            SQL = "UPDATE counter_data SET localValue=? WHERE upper(tableName)=upper(?)";
+            SQL = "UPDATE counter_data SET counterLastSync=? WHERE upper(tableName)=upper(?)";
         }else{
-            SQL = "insert counter_data into counter_data (localValue,tableName) values (?,upper(?))";
+            SQL = "insert counter_data into counter_data (counterLastSync,tableName) values (?,upper(?))";
         }
 
         String[] parametros = new String[] { tableName,String.valueOf(counterLocal)};
@@ -246,7 +248,7 @@ public class ProductDao {
     }
 
 
-    public List<Product> list(int localCounter){
+    public List<Product> list(int counterLastSync){
 
         List<Product> productos = new ArrayList<Product>();
 
@@ -254,7 +256,7 @@ public class ProductDao {
 
         // object changed on client since last sync to server ?
         final String SQL = "SELECT id,code,name,counterLastUpdate,isDeleted,timeStampUpdated FROM product WHERE counterLastUpdate>?";
-        Cursor cursor = db.getDataBase().rawQuery(SQL,new String[]{String.valueOf(localCounter)});
+        Cursor cursor = db.getDataBase().rawQuery(SQL,new String[]{String.valueOf(counterLastSync)});
 
 
         while (cursor.moveToNext()) {

@@ -41,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
         task.execute("product");
     }
 
+    public void btnToServer(View view){
+
+        SyncClientToServer task = new SyncClientToServer();
+        task.execute();
+    }
+
+
 
 
     public void btnAdd(View view){
@@ -63,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
         protected ResponseRest<ResponseList<List<Product>>> doInBackground(String... params) {
 
 
-            int value = productService.lastServerCounter("product");
+            int lastServerCounter = productService.lastServerCounter("product");
 
 
-            return loginProxy.list(value);
+            return loginProxy.list(lastServerCounter);
         }
 
         @Override
@@ -106,14 +113,14 @@ public class MainActivity extends AppCompatActivity {
 
             //productService.syncToServer();
 
-            //productDao.updateCounterServer("product",response.response.counterServer);
+            //productDao.serverCounterLastSyncUpdate("product",response.response.counterServer);
 
             return null;
         }
     }
 
 
-    private class SyncClientToSeever extends AsyncTask<Void, Void, String> {
+    private class SyncClientToServer extends AsyncTask<Void, Void, String> {
 
 
         @Override
