@@ -9,6 +9,7 @@ import net.msonic.testsyncdata.to.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -33,11 +34,59 @@ public class ProductDao {
 
 
 
+    public int lastUpdateCounter(String tableName){
+
+        //UtilDB db = UtilDB.GetUtilDb(context);
+        final String SQL = "SELECT updateValue FROM counter_data WHERE upper(tableName)=upper(?)";
+
+        String[] parametros = new String[] { tableName};
+
+
+        Cursor cursor = db.getDataBase().rawQuery(SQL, parametros);
+
+        int counter=0;
+
+        if(cursor.moveToNext()){
+            counter = cursor.getInt(cursor.getColumnIndex("updateValue"));
+        }
+
+        cursor.close();
+
+
+        return counter;
+
+    }
+
+    public void updateCounterUpdate(String tableName, int counterServer){
+        //UtilDB db = UtilDB.GetUtilDb(context);
+        //String SQL = "UPDATE counter_sever SET value=? WHERE upper(tableName)=upper(?)";
+
+        String SQL = "SELECT updateValue FROM counter_data WHERE upper(tableName)=upper(?)";
+        String[] parametros = new String[] { tableName,String.valueOf(counterServer)};
+
+
+        Cursor cursor = db.getDataBase().rawQuery(SQL, new String[] { tableName});
+
+        boolean existe=false;
+        if(cursor.moveToNext()){
+            existe = true;
+        }
+
+        if(existe){
+            SQL = "UPDATE counter_data SET updateValue=? WHERE upper(tableName)=upper(?)";
+        }else{
+            SQL = "insertFromServer into counter_data (tableName,updateValue) values (upper(?),?)";
+        }
+
+        db.getDataBase().execSQL(SQL,parametros);
+
+    }
+
 
     public int lastServerCounter(String tableName){
 
         //UtilDB db = UtilDB.GetUtilDb(context);
-        final String SQL = "SELECT serverValue FROM counter_data WHERE upper(tableName)=upper(?)";
+        final String SQL = "SELECT ifnull(serverValue,0) as serverValue  FROM counter_data WHERE upper(tableName)=upper(?)";
 
         String[] parametros = new String[] { tableName};
 
@@ -123,16 +172,16 @@ public class ProductDao {
         if(existe){
             SQL = "UPDATE counter_data SET localValue=? WHERE upper(tableName)=upper(?)";
         }else{
-            SQL = "insert into counter_data (tableName,localValue) values (upper(?),?)";
+            SQL = "insertFromServer into counter_data (tableName,localValue) values (upper(?),?)";
         }
 
         db.getDataBase().execSQL(SQL,parametros);
 
     }
 
-    public void insert(Product product){
+    public void insertFromServer(Product product){
 
-        final String SQL = "INSERT INTO product(id,code,name,counterFromServer,counterToServer,isDeleted,timeStampUpdated) VALUES (?,?,?,?,?,?,?)";
+        final String SQL = "INSERT INTO product(id,code,name,counterLastUpdate,isDeleted,timeStampUpdated) VALUES (?,?,?,?,?,?)";
 
 
         final SQLiteStatement statementInsert = db.getDataBase().compileStatement(SQL);
@@ -142,8 +191,7 @@ public class ProductDao {
         statementInsert.bindString(++index, product.id);
         statementInsert.bindString(++index, product.code);
         statementInsert.bindString(++index, product.name);
-        statementInsert.bindLong(++index, product.counterFromServer);
-        statementInsert.bindLong(++index, product.counterToServer);
+        statementInsert.bindLong(++index, product.counterUpdate);
         statementInsert.bindLong(++index, product.deleted);
         statementInsert.bindLong(++index, product.timeStampUpdated);
 
@@ -152,17 +200,17 @@ public class ProductDao {
 
     }
 
-    public void update(Product product){
 
-        final String SQL = "UPDATE product SET name=?,counterFromServer=?,counterToServer=?,isDeleted=?,timeStampUpdated=? WHERE ID=?";
+    public void updateFromServer(Product product){
+
+        final String SQL = "UPDATE product SET name=?,counterLastUpdate=?,isDeleted=?,timeStampUpdated=? WHERE ID=?";
 
         final SQLiteStatement statementInsert = db.getDataBase().compileStatement(SQL);
         statementInsert.clearBindings();
         int index=0;
 
         statementInsert.bindString(++index, product.name);
-        statementInsert.bindLong(++index, product.counterFromServer);
-        statementInsert.bindLong(++index, product.counterToServer);
+        statementInsert.bindLong(++index, product.counterUpdate);
         statementInsert.bindLong(++index, product.deleted);
         statementInsert.bindLong(++index, product.timeStampUpdated);
         statementInsert.bindString(++index, product.id);
@@ -174,7 +222,7 @@ public class ProductDao {
 
         Product product = null;
 
-        final String SQL = "SELECT id,code,name,counterFromServer,counterToServer,isDeleted,timeStampUpdated FROM product WHERE ID=?";
+        final String SQL = "SELECT id,code,name,counterLastUpdate,isDeleted,timeStampUpdated FROM product WHERE ID=?";
         Cursor cursor = db.getDataBase().rawQuery(SQL,new String[]{id});
         if(cursor.moveToNext()) {
             product = new Product();
@@ -182,8 +230,7 @@ public class ProductDao {
             product.id = cursor.getString(cursor.getColumnIndex("id"));
             product.code = cursor.getString(cursor.getColumnIndex("code"));
             product.name = cursor.getString(cursor.getColumnIndex("name"));
-            product.counterFromServer = cursor.getInt(cursor.getColumnIndex("counterFromServer"));
-            product.counterToServer = cursor.getInt(cursor.getColumnIndex("counterToServer"));
+            product.counterUpdate = cursor.getInt(cursor.getColumnIndex("counterLastUpdate"));
             product.deleted = cursor.getInt(cursor.getColumnIndex("isDeleted"));
             product.timeStampUpdated = cursor.getLong(cursor.getColumnIndex("timeStampUpdated"));
 
@@ -200,7 +247,7 @@ public class ProductDao {
 
         Product product = null;
 
-        final String SQL = "SELECT id,code,name,counterFromServer,counterToServer,isDeleted,timeStampUpdated FROM product WHERE counterToServer>?";
+        final String SQL = "SELECT id,code,name,counterLastUpdate,isDeleted,timeStampUpdated FROM product WHERE counterLastUpdate>?";
         Cursor cursor = db.getDataBase().rawQuery(SQL,new String[]{String.valueOf(localCounter)});
 
 
@@ -210,8 +257,7 @@ public class ProductDao {
             product.id = cursor.getString(cursor.getColumnIndex("id"));
             product.code = cursor.getString(cursor.getColumnIndex("code"));
             product.name = cursor.getString(cursor.getColumnIndex("name"));
-            product.counterFromServer = cursor.getInt(cursor.getColumnIndex("counterFromServer"));
-            product.counterToServer = cursor.getInt(cursor.getColumnIndex("counterToServer"));
+            product.counterUpdate = cursor.getInt(cursor.getColumnIndex("counterLastUpdate"));
             product.deleted = cursor.getInt(cursor.getColumnIndex("isDeleted"));
             product.timeStampUpdated = cursor.getLong(cursor.getColumnIndex("timeStampUpdated"));
 
@@ -224,4 +270,69 @@ public class ProductDao {
 
     }
 
+
+
+
+    public void insertFromClient(Product product){
+
+
+
+        if(product.id==null){
+            UUID uuid = UUID.randomUUID();
+            product.id = uuid.toString();
+        }
+
+        product.timeStampUpdated = System.currentTimeMillis()/1000L;
+
+
+        final String SQL = "INSERT INTO product(id,code,name,counterLastUpdate,isDeleted,timeStampUpdated) VALUES (?,?,?,?,?,?)";
+
+        final SQLiteStatement statementInsert = db.getDataBase().compileStatement(SQL);
+        statementInsert.clearBindings();
+        int index=0;
+
+        statementInsert.bindString(++index, product.id);
+        statementInsert.bindString(++index, product.code);
+        statementInsert.bindString(++index, product.name);
+        statementInsert.bindLong(++index, product.counterUpdate);
+        statementInsert.bindLong(++index, product.deleted);
+        statementInsert.bindLong(++index, product.timeStampUpdated);
+
+        statementInsert.executeUpdateDelete();
+
+
+    }
+
+
+    public void updateFromClient(Product product){
+
+        product.timeStampUpdated = System.currentTimeMillis()/1000L;
+
+        final String SQL = "UPDATE product SET name=?,counterLastUpdate=?,isDeleted=?,timeStampUpdated=? WHERE ID=?";
+
+        final SQLiteStatement statementInsert = db.getDataBase().compileStatement(SQL);
+        statementInsert.clearBindings();
+        int index=0;
+
+        statementInsert.bindString(++index, product.name);
+        statementInsert.bindLong(++index, product.counterUpdate);
+        statementInsert.bindLong(++index, product.deleted);
+        statementInsert.bindLong(++index, product.timeStampUpdated);
+        statementInsert.bindString(++index, product.id);
+        statementInsert.executeUpdateDelete();
+
+    }
+
+
+    public void deleteFromClient(Product product){
+        final String SQL = "UPDATE product SET isDeleted=1 WHERE ID=?";
+
+        final SQLiteStatement statementInsert = db.getDataBase().compileStatement(SQL);
+        statementInsert.clearBindings();
+        int index=0;
+
+        statementInsert.bindString(++index, product.id);
+        statementInsert.executeUpdateDelete();
+
+    }
 }

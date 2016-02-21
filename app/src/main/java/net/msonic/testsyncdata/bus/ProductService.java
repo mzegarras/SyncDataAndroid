@@ -61,11 +61,14 @@ public class ProductService {
         dbHelper.close();
 
     }
+
+
     public void syncFromServer(int lastServerCounter,ResponseRest<ResponseList<List<Product>>> response){
 
 
         dbHelper.openDataBase();
-        int localCounter = productDao.lastLocalCounter("product");
+        int counter_lastsync = productDao.lastLocalCounter("product");
+        int updateLocalCounter = productDao.lastUpdateCounter("product");
 
         for (Product objectToSync:response.response.result){
 
@@ -83,7 +86,7 @@ public class ProductService {
                     }
 
                     // check for conflict (object updated locally since last sync to server)
-                    if (productLocal.counterFromServer > lastServerCounter) {
+                    if (productLocal.counterUpdate > counter_lastsync) {
 
                         if (conflictHandling == Common.ConflictHandling.SERVERPRIORITY.getValue()) {
                             productLocal.name = objectToSync.name;
@@ -99,17 +102,17 @@ public class ProductService {
 							}
 
                         }
-                    } else { // no conflict: update object locally
+                    } else { // no conflict: updateFromServer object locally
                         productLocal.name = objectToSync.name;
                         productLocal.deleted = objectToSync.deleted;
                     }
 
-                    productDao.update(productLocal);
+                    productDao.updateFromServer(productLocal);
                 }
 
             }else{
-                objectToSync.counterFromServer = localCounter; //do not increase $this->counter because no change that must be synced back to server
-                productDao.insert(objectToSync);
+                objectToSync.counterUpdate = updateLocalCounter; //do not increase $this->counter because no change that must be synced back to server
+                productDao.insertFromServer(objectToSync);
             }
         }
 
@@ -122,4 +125,39 @@ public class ProductService {
 
         dbHelper.close();
     }
+
+
+
+    public void debugOutput(String text, List<Product> objects) {
+        System.out.println(text);
+        if(objects==null || objects.size()<=0){
+            System.out.println("None");
+        }else{
+            System.out.println(objects.size());
+        }
+
+        for (Product object : objects) {
+            object.toString();
+        }
+    }
+
+    public void display() {
+        System.out.println("----------------------------------------");
+
+        int localCounter = productDao.lastLocalCounter("product");
+        int serverCounter = productDao.lastServerCounter("product");
+
+        Log.d(TAG, String.format("State of client: name: %s - counter: %s - counter last sync: %s - - Server counter last sync:%s",
+                "Android",
+                0,
+                localCounter,
+                serverCounter));
+
+
+        //debugOutput("Objects on client:", this.records);
+
+    }
+
+
+
 }
