@@ -26,4 +26,22 @@ public class Common {
 
     }
 
+
+    public enum Status {
+        OK(1),
+        NOOK(0),
+        NOSET(-1);
+
+        private final int value;
+
+        private Status(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+    }
+
 }

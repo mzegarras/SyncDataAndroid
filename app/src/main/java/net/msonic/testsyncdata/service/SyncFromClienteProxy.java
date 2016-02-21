@@ -3,6 +3,7 @@ package net.msonic.testsyncdata.service;
 import net.msonic.testsyncdata.CustomApplication;
 import net.msonic.testsyncdata.contract.ProductContract;
 import net.msonic.testsyncdata.contract.ResponseList;
+import net.msonic.testsyncdata.contract.ResponseRest;
 import net.msonic.testsyncdata.to.Product;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class SyncFromClienteProxy {
     @Named("server1")
     RestAdapter restAdapter;
 
-    public ResponseList<Integer> list(List<Product> products){
+    public ResponseRest<ResponseList<Integer>> sync(List<Product> products){
         final ProductContract service = restAdapter.create(ProductContract.class);
 
         return service.syncFromClient(products);

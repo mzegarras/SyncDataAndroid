@@ -8,6 +8,7 @@ import net.msonic.testsyncdata.UtilDB;
 import net.msonic.testsyncdata.contract.ResponseList;
 import net.msonic.testsyncdata.contract.ResponseRest;
 import net.msonic.testsyncdata.dao.ProductDao;
+import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.to.Product;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ProductService {
     CustomApplication application;
 
     @Inject ProductDao productDao;
+    @Inject SyncFromClienteProxy syncFromClienteProxy;
 
     @Inject
     UtilDB dbHelper;
@@ -51,16 +53,38 @@ public class ProductService {
     }
 
 
-    public List<Product> syncToServer() {
+    public void syncToServer() {
+
+
+
+
         dbHelper.openDataBase();
 
         int counterLastSync = productDao.counterLastSync("product");
-
+        int counter =productDao.counter("product");
         List<Product> products = productDao.list(counterLastSync);
 
-        dbHelper.close();
+        try{
+            ResponseRest<ResponseList<Integer>> response = syncFromClienteProxy.sync(products);
 
-        return products;
+            dbHelper.beginTransaction();
+
+
+            if(response.status==0){
+                if(response.response.result==Common.Status.OK.getValue()){
+                    productDao.counterLastSyncUpdate("product",counter);
+                    productDao.serverCounterLastSyncUpdate("product",response.response.counterServer);
+                }
+            }
+
+            dbHelper.setTransactionSuccessful();
+        }catch(Exception ex){
+            Log.e(TAG,"Error",ex);
+        } finally {
+            dbHelper.endTransaction();
+            dbHelper.close();
+        }
+
 
     }
 

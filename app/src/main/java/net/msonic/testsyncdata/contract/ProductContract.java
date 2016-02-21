@@ -17,5 +17,6 @@ public interface ProductContract {
     @POST("/products/syncToClient/{counterServer}")
     ResponseRest<ResponseList<List<Product>>> syncToClient(@Path("counterServer") int counterServer,@Body String data);
 
-    ResponseList<Integer> syncFromClient(@Body List<Product> products);
+    @POST("/products/syncFromClient")
+    ResponseRest<ResponseList<Integer>> syncFromClient(@Body List<Product> products);
 }

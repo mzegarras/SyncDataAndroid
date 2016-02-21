@@ -128,7 +128,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
 
-            syncFromClienteProxy.list(productService.syncToServer());
+            productService.syncToServer();
+
+
+
 
             return null;
         }
