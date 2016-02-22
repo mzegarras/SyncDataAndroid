@@ -88,7 +88,7 @@ public class ProductDao {
     public int serverCounterLastSync(String tableName){
 
         //UtilDB db = UtilDB.GetUtilDb(context);
-        final String SQL = "SELECT ifnull(serverCounterLastSync,0) as serverValue  FROM counter_data WHERE upper(tableName)=upper(?)";
+        final String SQL = "SELECT ifnull(serverCounterLastSync,0) as serverCounterLastSync  FROM counter_data WHERE upper(tableName)=upper(?)";
 
         String[] parametros = new String[] { tableName};
 
