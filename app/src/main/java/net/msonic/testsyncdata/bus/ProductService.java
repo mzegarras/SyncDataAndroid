@@ -53,6 +53,21 @@ public class ProductService {
     }
 
 
+
+    public void doSync() {
+        // first sync from server to client, then from client to server,
+        // because only client can handle conflicts (server cannot handle
+        // conflicts because server does not know state of client)
+        //this.syncFromServer();
+        this.syncToServer();
+    }
+
+    public void doFullSync() {
+        //this.counter_lastsync = 0; // force full sync to server
+        //this.servercounter_lastsync = 0; // force full sync from server
+        this.doSync();
+    }
+
     public void syncToServer() {
 
         boolean raiseError=false;
