@@ -55,20 +55,35 @@ public class ProductService {
 
     public void syncToServer() {
 
+        boolean raiseError=false;
+
+        int counterLastSync = -1;
+        int counter = -1;
+        List<Product> products = null;
+
+        try{
+
+            dbHelper.openDataBase();
+
+            counterLastSync = productDao.counterLastSync("product");
+            counter =productDao.counter("product");
+            products = productDao.list(counterLastSync);
+
+        }catch(Exception ex){
+            dbHelper.close();
+            Log.e(TAG,"Error",ex);
+            raiseError = true;
+        }
 
 
+        Log.d(TAG,"Invocar al rest service");
 
-        dbHelper.openDataBase();
-
-        int counterLastSync = productDao.counterLastSync("product");
-        int counter =productDao.counter("product");
-        List<Product> products = productDao.list(counterLastSync);
+        if(raiseError) return;
 
         try{
             ResponseRest<ResponseList<Integer>> response = syncFromClienteProxy.sync(products);
 
             dbHelper.beginTransaction();
-
 
             if(response.status==0){
                 if(response.response.result==Common.Status.OK.getValue()){
@@ -90,10 +105,6 @@ public class ProductService {
 
 
     public void syncFromServer(ResponseRest<ResponseList<List<Product>>> response){
-
-
-
-
 
         dbHelper.openDataBase();
         int counter_lastsync = productDao.counterLastSync("product");
@@ -154,39 +165,6 @@ public class ProductService {
 
         dbHelper.close();
     }
-
-
-
-    public void debugOutput(String text, List<Product> objects) {
-        System.out.println(text);
-        if(objects==null || objects.size()<=0){
-            System.out.println("None");
-        }else{
-            System.out.println(objects.size());
-        }
-
-        for (Product object : objects) {
-            object.toString();
-        }
-    }
-
-    public void display() {
-        System.out.println("----------------------------------------");
-
-        int localCounter = productDao.counterLastSync("product");
-        int serverCounter = productDao.serverCounterLastSync("product");
-
-        Log.d(TAG, String.format("State of client: name: %s - counter: %s - counter last sync: %s - - Server counter last sync:%s",
-                "Android",
-                0,
-                localCounter,
-                serverCounter));
-
-
-        //debugOutput("Objects on client:", this.records);
-
-    }
-
 
     public void insertFromClient(Product product){
         dbHelper.openDataBase();
