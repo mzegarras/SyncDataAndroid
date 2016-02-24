@@ -3,12 +3,19 @@ package net.msonic.testsyncdata;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.SpiceRequest;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.contract.ResponseList;
 import net.msonic.testsyncdata.contract.ResponseRest;
 import net.msonic.testsyncdata.dao.ProductDao;
+import net.msonic.testsyncdata.robospice.BaseSpiceActivity;
+import net.msonic.testsyncdata.robospice.request.DemoRequest;
 import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.service.SyncToClientProy;
 import net.msonic.testsyncdata.to.Product;
@@ -17,7 +24,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseSpiceActivity {
 
     @Inject
     ProductDao productDao;
@@ -37,15 +44,34 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void btnAceptar(View view){
-
         SyncToClientTask task = new SyncToClientTask();
         task.execute("product");
     }
 
+    @Inject
+    DemoRequest demoRequest;
+
     public void btnToServer(View view){
 
-        SyncClientToServer task = new SyncClientToServer();
-        task.execute();
+
+        getSpiceManager().execute(demoRequest, new RequestListener<String>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+
+            }
+
+            @Override
+            public void onRequestSuccess(String s) {
+                Log.d(MainActivity.class.getCanonicalName(),s);
+            }
+        });
+
+       /* SyncClientToServer task = new SyncClientToServer();
+        task.execute();*/
+
+
+
+
     }
 
 

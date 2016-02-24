@@ -14,6 +14,7 @@ import net.msonic.testsyncdata.R;
 import net.msonic.testsyncdata.UtilDB;
 import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.dao.ProductDao;
+import net.msonic.testsyncdata.robospice.request.DemoRequest;
 import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.service.SyncToClientProy;
 
@@ -150,5 +151,11 @@ public class ToolsApiModule {
         return syncFromClienteProxy;
     }
 
+    @Provides
+    @Singleton
+    DemoRequest demoRequest(CustomApplication application) {
+        DemoRequest demoRequest = new DemoRequest(application);
+        return demoRequest;
+    }
 
 }
