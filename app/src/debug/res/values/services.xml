@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="url_host_1">http://10.0.2.2:9001/api/v1/</string>
-    <string name="url_host_2">http://10.0.2.2.56:9001/api/v1/</string>
+    <string name="url_host_1">http://192.168.56.1:9001/api/v1/</string>
+    <string name="url_host_2">http://192.168.56.1:9001/api/v1/</string>
     <integer name="timeout_services">90</integer>
 </resources>

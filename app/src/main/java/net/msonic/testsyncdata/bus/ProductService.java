@@ -89,7 +89,7 @@ public class ProductService {
     }
 
 
-    public void syncFromServer(int lastServerCounter,ResponseRest<ResponseList<List<Product>>> response){
+    public void syncFromServer(ResponseRest<ResponseList<List<Product>>> response){
 
 
 

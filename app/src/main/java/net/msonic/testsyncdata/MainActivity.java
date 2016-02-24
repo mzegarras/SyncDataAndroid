@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void btnAdd(View view){
         Product p = new Product();
-        p.name="Product2";
-        p.code="00002";
+        p.name="Product9";
+        p.code="00009";
 
         productService.insertFromClient(p);
 
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             //DESCARGAR AL Cliente
-            productService.syncFromServer(response.response.counterServer,response);
+            productService.syncFromServer(response);
 
             //productService.syncToServer();
 

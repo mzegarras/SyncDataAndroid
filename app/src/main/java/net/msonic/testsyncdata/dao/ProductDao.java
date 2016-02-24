@@ -181,7 +181,7 @@ public class ProductDao {
             SQL = "insert counter_data into counter_data (counterLastSync,tableName) values (?,upper(?))";
         }
 
-        String[] parametros = new String[] { tableName,String.valueOf(counterLocal)};
+        String[] parametros = new String[] { String.valueOf(counterLocal),tableName};
         db.getDataBase().execSQL(SQL,parametros);
 
     }
