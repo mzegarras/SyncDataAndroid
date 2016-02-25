@@ -60,7 +60,7 @@ public class MainActivity extends BaseSpiceActivity {
 
     public static final long SECONDS_PER_MINUTE = 60L;
 
-    public static final long SYNC_INTERVAL_IN_MINUTES = 1L;
+    public static final long SYNC_INTERVAL_IN_MINUTES = 60L;
 
     public static final long SYNC_INTERVAL =
             SYNC_INTERVAL_IN_MINUTES *
@@ -186,14 +186,14 @@ public class MainActivity extends BaseSpiceActivity {
 
         //ContentResolver.setSyncAutomatically(newAccount, "com.sportsteamkarma.provider", true);
 
-      /* ContentResolver.requestSync(
-                newAccount,"com.sportsteamkarma.provider", Bundle.EMPTY);*/
+       ContentResolver.requestSync(
+                newAccount,"com.sportsteamkarma.provider", Bundle.EMPTY);
 
-        ContentResolver.addPeriodicSync(
+       /* ContentResolver.addPeriodicSync(
                 newAccount,
                 "com.sportsteamkarma.provider",
                 Bundle.EMPTY,
-                SYNC_INTERVAL);
+                SYNC_INTERVAL);*/
 
 
 
@@ -214,6 +214,7 @@ public class MainActivity extends BaseSpiceActivity {
         p1.code="00021";
 
         productService.insertFromClient(p1);
+        Log.d(MainActivity.class.getCanonicalName(),"Ok");
     }
 
     @Inject SyncToClientProy syncToClientProy;
