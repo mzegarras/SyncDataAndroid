@@ -12,10 +12,6 @@
     </include>
 
 
-
-
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +25,7 @@
         android:layout_below="@+id/textView"
         android:layout_toRightOf="@+id/textView"
         android:layout_toEndOf="@+id/textView"
-        android:layout_marginTop="66dp" android:onClick="btnAceptar"
+        android:layout_marginTop="1dp" android:onClick="btnAceptar"
         android:id="@+id/button" />
 
     <Button
@@ -55,7 +51,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/rv"/>
 
 

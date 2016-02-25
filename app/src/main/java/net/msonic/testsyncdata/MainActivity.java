@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -94,6 +95,7 @@ public class MainActivity extends BaseSpiceActivity {
 
         adapter = new Adapter(procesos);
 
+        rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
     }
 
@@ -262,7 +264,7 @@ public class MainActivity extends BaseSpiceActivity {
 
         @Override
         public ResumenViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_content, parent, false);
             ResumenViewHolder pvh = new ResumenViewHolder(v);
 
             return pvh;
