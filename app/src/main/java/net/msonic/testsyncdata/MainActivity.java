@@ -60,13 +60,8 @@ public class MainActivity extends BaseSpiceActivity {
 
 
     @Inject
-    DemoRequest  demoRequest1;
+    DemoRequest  demoRequest;
 
-    @Inject
-    DemoRequest  demoRequest2;
-
-    @Inject
-    DemoRequest  demoRequest3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,10 +124,10 @@ public class MainActivity extends BaseSpiceActivity {
         public void onRequestFailure(SpiceException spiceException) {
             Log.d(MainActivity.class.getCanonicalName(),String.valueOf(getSpiceManager().getPendingRequestCount()));
 
-            latch.countDown();
+          //  latch.countDown();
 
-            if(latch.getCount()==0)
-                progress_spinner.setVisibility(View.INVISIBLE);
+          //  if(latch.getCount()==0)
+            //    progress_spinner.setVisibility(View.INVISIBLE);
 
         }
 
@@ -141,23 +136,23 @@ public class MainActivity extends BaseSpiceActivity {
             //setProgressBarIndeterminateVisibility(false);
             Log.d(MainActivity.class.getCanonicalName(),String.valueOf(getSpiceManager().getPendingRequestCount()));
 
-            latch.countDown();
+           // latch.countDown();
 
 
 
-            if(latch.getCount()==0)
-                progress_spinner.setVisibility(View.INVISIBLE);
+           // if(latch.getCount()==0)
+             //   progress_spinner.setVisibility(View.INVISIBLE);
         }
     };
 
     public void btnToServer(View view){
 
-        latch = new CountDownLatch(5);
+        //latch = new CountDownLatch(5);
         //Make progress bar appear when you need it
         progress_spinner.setVisibility(View.VISIBLE);
 
-       /* getSpiceManager().execute(demoRequest,listener);
         getSpiceManager().execute(demoRequest,listener);
+       /* getSpiceManager().execute(demoRequest,listener);
         getSpiceManager().execute(demoRequest,listener);
         getSpiceManager().execute(demoRequest,listener);
         getSpiceManager().execute(demoRequest,listener);

@@ -153,6 +153,7 @@ public class ToolsApiModule {
     }
 
     @Provides
+    @Singleton
     DemoRequest demoRequest(CustomApplication application) {
         DemoRequest demoRequest = new DemoRequest(application);
         return demoRequest;

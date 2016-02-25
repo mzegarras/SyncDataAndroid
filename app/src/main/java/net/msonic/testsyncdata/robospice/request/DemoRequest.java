@@ -2,6 +2,7 @@ package net.msonic.testsyncdata.robospice.request;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.octo.android.robospice.request.SpiceRequest;
 
@@ -37,8 +38,8 @@ public class DemoRequest extends SpiceRequest<String> {
     @Override
     public String loadDataFromNetwork() throws Exception {
 
-
-        process.descripcion="Inicio";
+        Log.d(DemoRequest.class.getCanonicalName(),"sss");
+      //  process.descripcion="Inicio";
 
         busProvider.postOnMain(new IntentServiceResult(Activity.RESULT_OK, "Inicio"));
 
@@ -46,10 +47,12 @@ public class DemoRequest extends SpiceRequest<String> {
 
         productService.syncToServer();
 
-        process.descripcion="Inicio";
+        //process.descripcion="Inicio";
 
         busProvider.postOnMain(new IntentServiceResult(Activity.RESULT_OK, "Fin"));
 
+
+        Log.d(DemoRequest.class.getCanonicalName(),"ssssss");
         return "";
     }
 
