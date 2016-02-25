@@ -82,7 +82,7 @@ public class MainActivity extends BaseSpiceActivity {
         progress_spinner = (ProgressBar) findViewById(R.id.progress_spinner);
         rv = (RecyclerView)findViewById(R.id.rv);
         setSupportActionBar(toolbar);
-
+        rv.setLayoutManager(new LinearLayoutManager(this));
 
         if(latch!=null && latch.getCount()==0)
             progress_spinner.setVisibility(View.INVISIBLE);
@@ -91,11 +91,12 @@ public class MainActivity extends BaseSpiceActivity {
 
         Process p1 = new Process();
         demoRequest.process=p1;
+        p1.descripcion="Descarga";
         procesos.add(p1);
 
         adapter = new Adapter(procesos);
 
-        rv.setLayoutManager(new LinearLayoutManager(this));
+
         rv.setAdapter(adapter);
     }
 
