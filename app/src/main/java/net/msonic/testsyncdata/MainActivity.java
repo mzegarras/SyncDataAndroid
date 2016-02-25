@@ -54,10 +54,12 @@ public class MainActivity extends BaseSpiceActivity {
     @Inject
     BusProvider busProvider;
 
+    RecyclerView rv;
+
     private Toolbar toolbar;
     private ProgressBar progress_spinner;
     private List<Process> procesos = new ArrayList<Process>();
-
+    Adapter adapter;
 
     @Inject
     DemoRequest  demoRequest;
@@ -77,7 +79,7 @@ public class MainActivity extends BaseSpiceActivity {
         //Añado la toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         progress_spinner = (ProgressBar) findViewById(R.id.progress_spinner);
-
+        rv = (RecyclerView)findViewById(R.id.rv);
         setSupportActionBar(toolbar);
 
 
@@ -86,8 +88,13 @@ public class MainActivity extends BaseSpiceActivity {
 
         procesos = new ArrayList<Process>();
 
+        Process p1 = new Process();
+        demoRequest.process=p1;
+        procesos.add(p1);
 
+        adapter = new Adapter(procesos);
 
+        rv.setAdapter(adapter);
     }
 
 
@@ -112,6 +119,7 @@ public class MainActivity extends BaseSpiceActivity {
 
     @Subscribe
     public void doThis(IntentServiceResult intentServiceResult) {
+        adapter.notifyDataSetChanged();
         Toast.makeText(this, intentServiceResult.getResultValue(), Toast.LENGTH_SHORT).show();
     }
 

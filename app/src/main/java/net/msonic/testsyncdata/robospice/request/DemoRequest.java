@@ -21,7 +21,7 @@ import javax.inject.Inject;
 public class DemoRequest extends SpiceRequest<String> {
 
 
-    Process process;
+    public Process process;
 
     @Inject
     BusProvider busProvider;
@@ -39,7 +39,7 @@ public class DemoRequest extends SpiceRequest<String> {
     public String loadDataFromNetwork() throws Exception {
 
         Log.d(DemoRequest.class.getCanonicalName(),"sss");
-      //  process.descripcion="Inicio";
+       process.descripcion="Inicio";
 
         busProvider.postOnMain(new IntentServiceResult(Activity.RESULT_OK, "Inicio"));
 
@@ -47,7 +47,7 @@ public class DemoRequest extends SpiceRequest<String> {
 
         productService.syncToServer();
 
-        //process.descripcion="Inicio";
+        process.descripcion="Inicio";
 
         busProvider.postOnMain(new IntentServiceResult(Activity.RESULT_OK, "Fin"));
 
