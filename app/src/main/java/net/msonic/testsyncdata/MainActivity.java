@@ -60,7 +60,7 @@ public class MainActivity extends BaseSpiceActivity {
 
     public static final long SECONDS_PER_MINUTE = 60L;
 
-    public static final long SYNC_INTERVAL_IN_MINUTES = 1L;
+    public static final long SYNC_INTERVAL_IN_MINUTES = 60L;
 
     public static final long SYNC_INTERVAL =
             SYNC_INTERVAL_IN_MINUTES *
@@ -182,12 +182,19 @@ public class MainActivity extends BaseSpiceActivity {
         AccountManager accountManager = (AccountManager) this.getSystemService(ACCOUNT_SERVICE);
         // If the account already exists no harm is done but
         // a warning will be logged.
+
         accountManager.addAccountExplicitly(newAccount, null, null);
 
         //ContentResolver.setSyncAutomatically(newAccount, "com.sportsteamkarma.provider", true);
 
        /*ContentResolver.requestSync(
                 newAccount,"com.sportsteamkarma.provider", Bundle.EMPTY);*/
+
+        ContentResolver.setIsSyncable(newAccount, "com.sportsteamkarma.provider", 1);
+
+
+
+        ContentResolver.setSyncAutomatically(newAccount, "com.sportsteamkarma.provider", true);
 
         ContentResolver.addPeriodicSync(
                 newAccount,
