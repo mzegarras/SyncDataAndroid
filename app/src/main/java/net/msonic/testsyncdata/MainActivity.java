@@ -186,14 +186,14 @@ public class MainActivity extends BaseSpiceActivity {
 
         //ContentResolver.setSyncAutomatically(newAccount, "com.sportsteamkarma.provider", true);
 
-       ContentResolver.requestSync(
-                newAccount,"com.sportsteamkarma.provider", Bundle.EMPTY);
+       /*ContentResolver.requestSync(
+                newAccount,"com.sportsteamkarma.provider", Bundle.EMPTY);*/
 
-       /* ContentResolver.addPeriodicSync(
+        ContentResolver.addPeriodicSync(
                 newAccount,
                 "com.sportsteamkarma.provider",
                 Bundle.EMPTY,
-                SYNC_INTERVAL);*/
+                SYNC_INTERVAL);
 
 
 
