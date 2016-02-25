@@ -82,7 +82,7 @@ public class MainActivity extends BaseSpiceActivity {
 
             latch.countDown();
 
-            if(getSpiceManager().getPendingRequestCount()==0)
+            if(latch.getCount()==0)
                 progress_spinner.setVisibility(View.INVISIBLE);
 
         }

@@ -28,7 +28,7 @@ public class DemoRequest extends SpiceRequest<String> {
     @Override
     public String loadDataFromNetwork() throws Exception {
 
-        Thread.sleep(1000*4);
+        Thread.sleep(100*4);
         productService.syncToServer();
 
         return "";
