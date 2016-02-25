@@ -7,6 +7,7 @@ import com.octo.android.robospice.request.SpiceRequest;
 import net.msonic.testsyncdata.CustomApplication;
 import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.service.SyncFromClienteProxy;
+import net.msonic.testsyncdata.to.Process;
 
 import javax.inject.Inject;
 
@@ -15,6 +16,8 @@ import javax.inject.Inject;
  */
 public class DemoRequest extends SpiceRequest<String> {
 
+
+    Process process;
 
     @Inject
     ProductService productService;
@@ -27,6 +30,9 @@ public class DemoRequest extends SpiceRequest<String> {
 
     @Override
     public String loadDataFromNetwork() throws Exception {
+
+
+        process.descripcion="Inicio";
 
         Thread.sleep(1000*4);
         productService.syncToServer();

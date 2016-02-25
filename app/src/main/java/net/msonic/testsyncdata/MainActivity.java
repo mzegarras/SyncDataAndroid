@@ -1,13 +1,19 @@
 package net.msonic.testsyncdata;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.CachedSpiceRequest;
@@ -20,12 +26,15 @@ import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.contract.ResponseList;
 import net.msonic.testsyncdata.contract.ResponseRest;
 import net.msonic.testsyncdata.dao.ProductDao;
+import net.msonic.testsyncdata.notification.BusProvider;
 import net.msonic.testsyncdata.robospice.BaseSpiceActivity;
 import net.msonic.testsyncdata.robospice.request.DemoRequest;
 import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.service.SyncToClientProy;
+import net.msonic.testsyncdata.to.Process;
 import net.msonic.testsyncdata.to.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -39,8 +48,22 @@ public class MainActivity extends BaseSpiceActivity {
     @Inject
     ProductService productService;
 
+    @Inject
+    BusProvider busProvider;
+
     private Toolbar toolbar;
     private ProgressBar progress_spinner;
+    private List<Process> procesos = new ArrayList<Process>();
+
+
+    @Inject
+    DemoRequest  demoRequest1;
+
+    @Inject
+    DemoRequest  demoRequest2;
+
+    @Inject
+    DemoRequest  demoRequest3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +85,25 @@ public class MainActivity extends BaseSpiceActivity {
 
         if(latch!=null && latch.getCount()==0)
             progress_spinner.setVisibility(View.INVISIBLE);
+
+        procesos = new ArrayList<Process>();
+
+
+
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        busProvider.unregister(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        busProvider.register(this);
+    }
 
 
     public void btnAceptar(View view){
@@ -71,8 +111,9 @@ public class MainActivity extends BaseSpiceActivity {
         task.execute("product");
     }
 
-    @Inject
-    DemoRequest demoRequest;
+
+
+
 
     CountDownLatch latch;
 
@@ -108,12 +149,12 @@ public class MainActivity extends BaseSpiceActivity {
         //Make progress bar appear when you need it
         progress_spinner.setVisibility(View.VISIBLE);
 
+       /* getSpiceManager().execute(demoRequest,listener);
         getSpiceManager().execute(demoRequest,listener);
         getSpiceManager().execute(demoRequest,listener);
         getSpiceManager().execute(demoRequest,listener);
         getSpiceManager().execute(demoRequest,listener);
-        getSpiceManager().execute(demoRequest,listener);
-        getSpiceManager().execute(demoRequest,listener);
+        getSpiceManager().execute(demoRequest,listener);*/
 
 
 
@@ -201,6 +242,50 @@ public class MainActivity extends BaseSpiceActivity {
 
 
 
+    public class Adapter extends RecyclerView.Adapter<ResumenViewHolder> {
+
+        private final List<Process> detalle;
+
+        public Adapter(List<Process> detalle) {
+            this.detalle = detalle;
+        }
+
+        @Override
+        public ResumenViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main, parent, false);
+            ResumenViewHolder pvh = new ResumenViewHolder(v);
+
+            return pvh;
+
+        }
+
+        @Override
+        public void onBindViewHolder(ResumenViewHolder holder, int position) {
+            Process item = detalle.get(position);
+
+            holder.txtDescripcion.setText(item.descripcion);
+
+        }
+
+        @Override
+        public int getItemCount() {
+            if (detalle == null)
+                return 0;
+            else {
+                return detalle.size();
+            }
+        }
+
+
+    }
+
+    public class ResumenViewHolder extends RecyclerView.ViewHolder {
+        TextView txtDescripcion;
+        ResumenViewHolder(View itemView) {
+            super(itemView);
+            txtDescripcion = (TextView) itemView.findViewById(R.id.txtDescripcion);
+        }
+    }
 
 
 }
