@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.msonic.testsyncdata.MainActivity">
+    tools:context="net.msonic.testsyncdata.MainActivity" android:orientation="vertical">
 
 
     <include
