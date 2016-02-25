@@ -5,7 +5,7 @@ package net.msonic.testsyncdata.component;
  */
 
 
-import net.msonic.testsyncdata.MainActivity;
+import net.msonic.testsyncdata.TestActivity;
 import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.dao.ProductDao;
 import net.msonic.testsyncdata.module.ApplicationModule;
@@ -26,7 +26,7 @@ public interface ToolsComponent {
 
 
 
-    void inject(MainActivity activity);
+    void inject(TestActivity activity);
 
     void inject(ProductService productService);
     void inject(ProductDao productDao);
