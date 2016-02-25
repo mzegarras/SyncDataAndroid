@@ -177,7 +177,7 @@ public class MainActivity extends BaseSpiceActivity {
 
         //ContentResolver.setSyncAutomatically(newAccount, "com.sportsteamkarma.provider", true);
 
-        ContentResolver.requestSync(
+       ContentResolver.requestSync(
                 newAccount,"com.sportsteamkarma.provider", Bundle.EMPTY);
 
 
@@ -188,8 +188,8 @@ public class MainActivity extends BaseSpiceActivity {
 
     public void btnAdd(View view){
         Product p = new Product();
-        p.name="Product9";
-        p.code="00009";
+        p.name="Product10";
+        p.code="000010";
 
         productService.insertFromClient(p);
 
