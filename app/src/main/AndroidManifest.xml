@@ -31,7 +31,7 @@
         <provider android:name=".sync.provider.SyncProvider"
             android:authorities="com.sportsteamkarma.provider"
             android:syncable="true"
-            android:label="DummyProvider" />
+            android:label="com.sportsteamkarma.provider" />
 
         <service
             android:name=".sync.security.AuthenticatorService">
@@ -45,7 +45,8 @@
 
         <service
             android:name=".sync.SyncService"
-            android:exported="true">
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>

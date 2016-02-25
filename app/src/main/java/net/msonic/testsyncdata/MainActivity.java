@@ -175,9 +175,10 @@ public class MainActivity extends BaseSpiceActivity {
         // a warning will be logged.
         accountManager.addAccountExplicitly(newAccount, null, null);
 
-        ContentResolver.setSyncAutomatically(newAccount, "com.sportsteamkarma.provider", true);
+        //ContentResolver.setSyncAutomatically(newAccount, "com.sportsteamkarma.provider", true);
 
-
+        ContentResolver.requestSync(
+                newAccount,"com.sportsteamkarma.provider", Bundle.EMPTY);
 
 
     }
