@@ -200,28 +200,6 @@ public class MainActivity extends BaseSpiceActivity {
     }
 
 
-    private class SyncClientToServer extends AsyncTask<Void, Void, String> {
-
-
-        @Override
-        protected String doInBackground(Void... params) {
-
-            productService.syncToServer();
-
-
-
-
-            return null;
-        }
-
-
-
-
-
-
-
-    }
-
 
 
 
