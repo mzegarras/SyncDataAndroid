@@ -3,12 +3,18 @@ package net.msonic.testsyncdata;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.ProgressBar;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.CachedSpiceRequest;
 import com.octo.android.robospice.request.SpiceRequest;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.octo.android.robospice.request.listener.SpiceServiceAdapter;
+import com.octo.android.robospice.request.listener.SpiceServiceListener;
 
 import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.contract.ResponseList;
@@ -32,12 +38,76 @@ public class MainActivity extends BaseSpiceActivity {
     @Inject
     ProductService productService;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ((CustomApplication) getApplication()).getDiComponent().inject(this);
+
+
+
+
+
+
+
+
+
+
+        getSpiceManager().addSpiceServiceListener(new SpiceServiceListener() {
+            @Override
+            public void onRequestSucceeded(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
+
+            }
+
+            @Override
+            public void onRequestFailed(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
+
+            }
+
+            @Override
+            public void onRequestCancelled(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
+
+            }
+
+            @Override
+            public void onRequestProgressUpdated(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
+                Log.d(MainActivity.class.getCanonicalName(),"onRequestProgressUpdated");
+
+
+            }
+
+            @Override
+            public void onRequestAdded(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
+
+            }
+
+            @Override
+            public void onRequestAggregated(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
+
+            }
+
+            @Override
+            public void onRequestNotFound(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
+
+            }
+
+            @Override
+            public void onRequestProcessed(CachedSpiceRequest<?> cachedSpiceRequest, RequestProcessingContext requestProcessingContext) {
+
+            }
+
+            @Override
+            public void onServiceStopped() {
+                //Make progress bar disappear
+                //progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
 
     }
 
@@ -53,18 +123,38 @@ public class MainActivity extends BaseSpiceActivity {
 
     public void btnToServer(View view){
 
+        //Make progress bar appear when you need it
+        //progressBar.setVisibility(View.VISIBLE);
 
         getSpiceManager().execute(demoRequest, new RequestListener<String>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-
+                //setProgressBarIndeterminateVisibility(false);
+                Log.d(MainActivity.class.getCanonicalName(),"1");
             }
 
             @Override
             public void onRequestSuccess(String s) {
+                //setProgressBarIndeterminateVisibility(false);
                 Log.d(MainActivity.class.getCanonicalName(),s);
             }
         });
+
+        getSpiceManager().execute(demoRequest, new RequestListener<String>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                //setProgressBarIndeterminateVisibility(false);
+                Log.d(MainActivity.class.getCanonicalName(),"2");
+            }
+
+            @Override
+            public void onRequestSuccess(String s) {
+                //setProgressBarIndeterminateVisibility(false);
+                Log.d(MainActivity.class.getCanonicalName(),s);
+            }
+        });
+
+
 
        /* SyncClientToServer task = new SyncClientToServer();
         task.execute();*/
