@@ -60,7 +60,8 @@ public class MainActivity extends BaseSpiceActivity {
         setSupportActionBar(toolbar);
 
 
-
+        if(latch!=null && latch.getCount()==0)
+            progress_spinner.setVisibility(View.INVISIBLE);
     }
 
 
