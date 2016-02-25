@@ -47,7 +47,7 @@ public class DemoRequest extends SpiceRequest<String> {
 
         productService.syncToServer();
 
-        process.descripcion="Inicio";
+        process.descripcion="Fin";
 
         busProvider.postOnMain(new IntentServiceResult(Activity.RESULT_OK, "Fin"));
 

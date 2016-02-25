@@ -82,6 +82,7 @@ public class MainActivity extends BaseSpiceActivity {
         progress_spinner = (ProgressBar) findViewById(R.id.progress_spinner);
         rv = (RecyclerView)findViewById(R.id.rv);
         setSupportActionBar(toolbar);
+        // 2. set layoutManger
         rv.setLayoutManager(new LinearLayoutManager(this));
 
         if(latch!=null && latch.getCount()==0)
