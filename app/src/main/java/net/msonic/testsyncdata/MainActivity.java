@@ -58,6 +58,15 @@ public class MainActivity extends BaseSpiceActivity {
     @Inject
     BusProvider busProvider;
 
+    public static final long SECONDS_PER_MINUTE = 60L;
+
+    public static final long SYNC_INTERVAL_IN_MINUTES = 1L;
+
+    public static final long SYNC_INTERVAL =
+            SYNC_INTERVAL_IN_MINUTES *
+                    SECONDS_PER_MINUTE;
+
+
     RecyclerView rv;
 
     private Toolbar toolbar;
@@ -177,8 +186,15 @@ public class MainActivity extends BaseSpiceActivity {
 
         //ContentResolver.setSyncAutomatically(newAccount, "com.sportsteamkarma.provider", true);
 
-       ContentResolver.requestSync(
-                newAccount,"com.sportsteamkarma.provider", Bundle.EMPTY);
+      /* ContentResolver.requestSync(
+                newAccount,"com.sportsteamkarma.provider", Bundle.EMPTY);*/
+
+        ContentResolver.addPeriodicSync(
+                newAccount,
+                "com.sportsteamkarma.provider",
+                Bundle.EMPTY,
+                SYNC_INTERVAL);
+
 
 
     }
@@ -187,12 +203,17 @@ public class MainActivity extends BaseSpiceActivity {
 
 
     public void btnAdd(View view){
-        Product p = new Product();
-        p.name="Product10";
-        p.code="000010";
+        Product p0 = new Product();
+        p0.name="Product11";
+        p0.code="000011";
 
-        productService.insertFromClient(p);
+        productService.insertFromClient(p0);
 
+        Product p1 = new Product();
+        p1.name="Product12";
+        p1.code="000012";
+
+        productService.insertFromClient(p1);
     }
 
     @Inject SyncToClientProy syncToClientProy;
