@@ -8,7 +8,7 @@ public class IntentServiceResult {
     int mResult;
     String mResultValue;
 
-    IntentServiceResult(int resultCode, String resultValue) {
+    public IntentServiceResult(int resultCode, String resultValue) {
         mResult = resultCode;
         mResultValue = resultValue;
     }

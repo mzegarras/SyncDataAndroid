@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.CachedSpiceRequest;
@@ -21,12 +22,14 @@ import com.octo.android.robospice.request.SpiceRequest;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.request.listener.SpiceServiceAdapter;
 import com.octo.android.robospice.request.listener.SpiceServiceListener;
+import com.squareup.otto.Subscribe;
 
 import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.contract.ResponseList;
 import net.msonic.testsyncdata.contract.ResponseRest;
 import net.msonic.testsyncdata.dao.ProductDao;
 import net.msonic.testsyncdata.notification.BusProvider;
+import net.msonic.testsyncdata.notification.IntentServiceResult;
 import net.msonic.testsyncdata.robospice.BaseSpiceActivity;
 import net.msonic.testsyncdata.robospice.request.DemoRequest;
 import net.msonic.testsyncdata.service.SyncFromClienteProxy;
@@ -112,6 +115,10 @@ public class MainActivity extends BaseSpiceActivity {
     }
 
 
+    @Subscribe
+    public void doThis(IntentServiceResult intentServiceResult) {
+        Toast.makeText(this, intentServiceResult.getResultValue(), Toast.LENGTH_SHORT).show();
+    }
 
 
 

@@ -1,11 +1,14 @@
 package net.msonic.testsyncdata.robospice.request;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.octo.android.robospice.request.SpiceRequest;
 
 import net.msonic.testsyncdata.CustomApplication;
 import net.msonic.testsyncdata.bus.ProductService;
+import net.msonic.testsyncdata.notification.BusProvider;
+import net.msonic.testsyncdata.notification.IntentServiceResult;
 import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.to.Process;
 
@@ -18,6 +21,9 @@ public class DemoRequest extends SpiceRequest<String> {
 
 
     Process process;
+
+    @Inject
+    BusProvider busProvider;
 
     @Inject
     ProductService productService;
@@ -34,8 +40,15 @@ public class DemoRequest extends SpiceRequest<String> {
 
         process.descripcion="Inicio";
 
+        busProvider.postOnMain(new IntentServiceResult(Activity.RESULT_OK, "Inicio"));
+
         Thread.sleep(1000*4);
+
         productService.syncToServer();
+
+        process.descripcion="Inicio";
+
+        busProvider.postOnMain(new IntentServiceResult(Activity.RESULT_OK, "Fin"));
 
         return "";
     }
