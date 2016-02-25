@@ -1,5 +1,8 @@
 package net.msonic.testsyncdata;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -163,18 +166,16 @@ public class MainActivity extends BaseSpiceActivity {
         //Make progress bar appear when you need it
         progress_spinner.setVisibility(View.VISIBLE);
 
-        getSpiceManager().execute(demoRequest,listener);
-       /* getSpiceManager().execute(demoRequest,listener);
-        getSpiceManager().execute(demoRequest,listener);
-        getSpiceManager().execute(demoRequest,listener);
-        getSpiceManager().execute(demoRequest,listener);
-        getSpiceManager().execute(demoRequest,listener);*/
+        //getSpiceManager().execute(demoRequest,listener);
 
+        // Create the account type and default account
+        Account newAccount = new Account("dummyaccount", "com.sportsteamkarma");
+        AccountManager accountManager = (AccountManager) this.getSystemService(ACCOUNT_SERVICE);
+        // If the account already exists no harm is done but
+        // a warning will be logged.
+        accountManager.addAccountExplicitly(newAccount, null, null);
 
-
-
-       /* SyncClientToServer task = new SyncClientToServer();
-        task.execute();*/
+        ContentResolver.setSyncAutomatically(newAccount, "com.sportsteamkarma.provider", true);
 
 
 

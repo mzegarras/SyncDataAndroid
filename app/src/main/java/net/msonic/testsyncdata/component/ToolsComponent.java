@@ -13,6 +13,8 @@ import net.msonic.testsyncdata.module.ToolsApiModule;
 import net.msonic.testsyncdata.robospice.request.DemoRequest;
 import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.service.SyncToClientProy;
+import net.msonic.testsyncdata.sync.SyncService;
+import net.msonic.testsyncdata.sync.adapters.SyncAdapter;
 
 import javax.inject.Singleton;
 
@@ -35,6 +37,10 @@ public interface ToolsComponent {
 
 
     void inject(DemoRequest demoRequest);
+    void inject(SyncAdapter syncAdapter);
+    void inject(SyncService syncService);
+
+
 
 
 }

@@ -18,6 +18,7 @@ import net.msonic.testsyncdata.notification.BusProvider;
 import net.msonic.testsyncdata.robospice.request.DemoRequest;
 import net.msonic.testsyncdata.service.SyncFromClienteProxy;
 import net.msonic.testsyncdata.service.SyncToClientProy;
+import net.msonic.testsyncdata.sync.adapters.SyncAdapter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -166,6 +167,13 @@ public class ToolsApiModule {
         return new BusProvider();
     }
 
+
+    @Provides
+    @Singleton
+    SyncAdapter syncAdapter(CustomApplication application) {
+        SyncAdapter syncAdapter = new SyncAdapter(application,true);
+        return syncAdapter;
+    }
 
 
 
