@@ -27,6 +27,7 @@ import net.msonic.testsyncdata.service.SyncToClientProy;
 import net.msonic.testsyncdata.to.Product;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javax.inject.Inject;
 
@@ -38,6 +39,8 @@ public class MainActivity extends BaseSpiceActivity {
     @Inject
     ProductService productService;
 
+    private Toolbar toolbar;
+    private ProgressBar progress_spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,64 +53,13 @@ public class MainActivity extends BaseSpiceActivity {
 
         ((CustomApplication) getApplication()).getDiComponent().inject(this);
 
+        //Añado la toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        progress_spinner = (ProgressBar) findViewById(R.id.progress_spinner);
+
+        setSupportActionBar(toolbar);
 
 
-
-
-
-
-
-
-
-        getSpiceManager().addSpiceServiceListener(new SpiceServiceListener() {
-            @Override
-            public void onRequestSucceeded(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
-
-            }
-
-            @Override
-            public void onRequestFailed(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
-
-            }
-
-            @Override
-            public void onRequestCancelled(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
-
-            }
-
-            @Override
-            public void onRequestProgressUpdated(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
-                Log.d(MainActivity.class.getCanonicalName(),"onRequestProgressUpdated");
-
-
-            }
-
-            @Override
-            public void onRequestAdded(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
-
-            }
-
-            @Override
-            public void onRequestAggregated(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
-
-            }
-
-            @Override
-            public void onRequestNotFound(CachedSpiceRequest<?> request, RequestProcessingContext requestProcessingContext) {
-
-            }
-
-            @Override
-            public void onRequestProcessed(CachedSpiceRequest<?> cachedSpiceRequest, RequestProcessingContext requestProcessingContext) {
-
-            }
-
-            @Override
-            public void onServiceStopped() {
-                //Make progress bar disappear
-                //progressBar.setVisibility(View.INVISIBLE);
-            }
-        });
 
     }
 
@@ -121,38 +73,47 @@ public class MainActivity extends BaseSpiceActivity {
     @Inject
     DemoRequest demoRequest;
 
+    CountDownLatch latch;
+
+    RequestListener<String> listener = new RequestListener<String>() {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Log.d(MainActivity.class.getCanonicalName(),String.valueOf(getSpiceManager().getPendingRequestCount()));
+
+            latch.countDown();
+
+            if(getSpiceManager().getPendingRequestCount()==0)
+                progress_spinner.setVisibility(View.INVISIBLE);
+
+        }
+
+        @Override
+        public void onRequestSuccess(String s) {
+            //setProgressBarIndeterminateVisibility(false);
+            Log.d(MainActivity.class.getCanonicalName(),String.valueOf(getSpiceManager().getPendingRequestCount()));
+
+            latch.countDown();
+
+
+
+            if(latch.getCount()==0)
+                progress_spinner.setVisibility(View.INVISIBLE);
+        }
+    };
+
     public void btnToServer(View view){
 
+        latch = new CountDownLatch(5);
         //Make progress bar appear when you need it
-        //progressBar.setVisibility(View.VISIBLE);
+        progress_spinner.setVisibility(View.VISIBLE);
 
-        getSpiceManager().execute(demoRequest, new RequestListener<String>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                //setProgressBarIndeterminateVisibility(false);
-                Log.d(MainActivity.class.getCanonicalName(),"1");
-            }
+        getSpiceManager().execute(demoRequest,listener);
+        getSpiceManager().execute(demoRequest,listener);
+        getSpiceManager().execute(demoRequest,listener);
+        getSpiceManager().execute(demoRequest,listener);
+        getSpiceManager().execute(demoRequest,listener);
+        getSpiceManager().execute(demoRequest,listener);
 
-            @Override
-            public void onRequestSuccess(String s) {
-                //setProgressBarIndeterminateVisibility(false);
-                Log.d(MainActivity.class.getCanonicalName(),s);
-            }
-        });
-
-        getSpiceManager().execute(demoRequest, new RequestListener<String>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                //setProgressBarIndeterminateVisibility(false);
-                Log.d(MainActivity.class.getCanonicalName(),"2");
-            }
-
-            @Override
-            public void onRequestSuccess(String s) {
-                //setProgressBarIndeterminateVisibility(false);
-                Log.d(MainActivity.class.getCanonicalName(),s);
-            }
-        });
 
 
 
