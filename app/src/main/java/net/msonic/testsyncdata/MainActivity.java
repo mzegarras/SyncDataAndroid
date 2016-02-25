@@ -204,14 +204,14 @@ public class MainActivity extends BaseSpiceActivity {
 
     public void btnAdd(View view){
         Product p0 = new Product();
-        p0.name="Product11";
-        p0.code="000011";
+        p0.name="Product20";
+        p0.code="000020";
 
         productService.insertFromClient(p0);
 
         Product p1 = new Product();
-        p1.name="Product12";
-        p1.code="000012";
+        p1.name="Product21";
+        p1.code="00021";
 
         productService.insertFromClient(p1);
     }
