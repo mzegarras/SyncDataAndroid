@@ -3,4 +3,9 @@
 
     <string name="pedido_fragment_title">TICKET DE VENTA</string>
 
+    <string name="action_add">Add</string>
+    <string name="action_remove">Remove</string>
+    <string name="selected_count">%1$s selected</string>
+
+
 </resources>
