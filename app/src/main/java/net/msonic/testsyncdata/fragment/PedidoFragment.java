@@ -6,6 +6,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.GestureDetector;
@@ -16,9 +17,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import net.msonic.testsyncdata.CustomApplication;
 import net.msonic.testsyncdata.R;
@@ -245,6 +244,13 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
 
 
 
+            if(adapter.getSelectedItemCount()<=0){
+                actionMode.finish();
+            }
+
+
+
+
             return super.onSingleTapConfirmed(e);
         }
 
@@ -310,11 +316,11 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
             holder.itemView.setActivated(selectedItems.get(position, false));
 
 
-            if(holder.itemView.isActivated()){
+            /*if(holder.itemView.isActivated()){
                 holder.lstButtons.setVisibility(View.VISIBLE);
             }else{
                 holder.lstButtons.setVisibility(View.GONE);
-            }
+            }*/
 
 
             /*
@@ -377,8 +383,8 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
             @Bind(R.id.txtPrecio)
             TextView txtPrecio;
 
-            @Bind(R.id.lstButtons)
-            LinearLayout lstButtons;
+            /*@Bind(R.id.lstButtons)
+            LinearLayout lstButtons;*/
 
 
             PersonViewHolder(View itemView) {
