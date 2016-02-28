@@ -1,6 +1,5 @@
 package net.msonic.testsyncdata;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +13,7 @@ import android.view.MenuItem;
 import net.msonic.testsyncdata.fragment.PedidoFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,PedidoFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +108,5 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
-    }
 }

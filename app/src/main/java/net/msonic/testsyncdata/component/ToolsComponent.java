@@ -8,6 +8,7 @@ package net.msonic.testsyncdata.component;
 import net.msonic.testsyncdata.TestActivity;
 import net.msonic.testsyncdata.bus.ProductService;
 import net.msonic.testsyncdata.dao.ProductDao;
+import net.msonic.testsyncdata.fragment.PedidoFragment;
 import net.msonic.testsyncdata.module.ApplicationModule;
 import net.msonic.testsyncdata.module.ToolsApiModule;
 import net.msonic.testsyncdata.robospice.request.DemoRequest;
@@ -42,5 +43,7 @@ public interface ToolsComponent {
 
 
 
+
+    void inject(PedidoFragment pedidoFragment);
 
 }

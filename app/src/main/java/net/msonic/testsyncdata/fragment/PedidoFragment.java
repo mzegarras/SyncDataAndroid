@@ -1,59 +1,40 @@
 package net.msonic.testsyncdata.fragment;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.google.android.gms.plus.PlusOneButton;
-
+import net.msonic.testsyncdata.CustomApplication;
 import net.msonic.testsyncdata.R;
+import net.msonic.testsyncdata.to.PedidoItem;
+import net.msonic.testsyncdata.to.Product;
 
-/**
- * A fragment with a Google +1 button.
- * Activities that contain this fragment must implement the
- * {@link PedidoFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PedidoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+
 public class PedidoFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    // The request code must be 0 or greater.
-    private static final int PLUS_ONE_REQUEST_CODE = 0;
-    // The URL to +1.  Must be a valid URL.
-    private final String PLUS_ONE_URL = "http://developer.android.com";
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private PlusOneButton mPlusOneButton;
 
-    private OnFragmentInteractionListener mListener;
+
+    @Bind(R.id.rvDetalle)
+    RecyclerView rvDetalle;
+
 
     public PedidoFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PedidoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static PedidoFragment newInstance(String param1, String param2) {
         PedidoFragment fragment = new PedidoFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,10 +42,55 @@ public class PedidoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+
+        ((CustomApplication) getActivity().getApplication()).getDiComponent().inject(this);
+
+
+    }
+
+
+    Adapter adapter;
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getActivity().setTitle(R.string.pedido_fragment_title);
+
+
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        rvDetalle.setLayoutManager(llm);
+
+        List<PedidoItem> detalle = new ArrayList<PedidoItem>();
+
+        PedidoItem p1 = new PedidoItem();
+        p1.producto=new Product();
+        p1.producto.name="Producto 1";
+        p1.cantidad = 0.5;
+        p1.precio = 1.5;
+        detalle.add(p1);
+
+
+        PedidoItem p2 = new PedidoItem();
+        p2.producto=new Product();
+        p2.producto.name="Producto 2";
+        p2.cantidad = 0.5;
+        p2.precio = 1.5;
+        detalle.add(p2);
+
+        PedidoItem p3 = new PedidoItem();
+        p3.producto=new Product();
+        p3.producto.name="Producto 3";
+        p3.cantidad = 0.5;
+        p3.precio = 1.5;
+        detalle.add(p3);
+
+        adapter =new Adapter(detalle);
+
+        rvDetalle.setAdapter(adapter);
+
     }
 
     @Override
@@ -72,49 +98,75 @@ public class PedidoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pedido, container, false);
-
+        ButterKnife.bind(this, view);
 
         return view;
     }
 
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+
+
+    public class Adapter extends RecyclerView.Adapter<Adapter.PersonViewHolder>{
+
+
+        final List<PedidoItem> detalle;
+
+        public Adapter(List<PedidoItem> detalle){
+            this.detalle=detalle;
         }
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+
+        @Override
+        public PersonViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_pedido_content, viewGroup, false);
+            PersonViewHolder pvh = new PersonViewHolder(v);
+            return pvh;
+
         }
+
+        @Override
+        public void onBindViewHolder(PersonViewHolder holder, int position) {
+
+            PedidoItem pedidoItem = detalle.get(position);
+
+            holder.txtProducto.setText(pedidoItem.producto.name);
+            holder.txtPrecio.setText(String.format("%s", pedidoItem.precio));
+            holder.txtCantidad.setText(String.format("%s", pedidoItem.cantidad));
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return detalle.size();
+        }
+
+        public class PersonViewHolder extends RecyclerView.ViewHolder {
+
+
+
+            @Bind(R.id.txtProducto)
+            TextView txtProducto;
+
+            @Bind(R.id.txtCantidad)
+            TextView txtCantidad;
+
+            @Bind(R.id.txtPrecio)
+            TextView txtPrecio;
+
+            PersonViewHolder(View itemView) {
+                super(itemView);
+
+                ButterKnife.bind(this, itemView);
+
+            }
+        }
+
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
+
 
 }

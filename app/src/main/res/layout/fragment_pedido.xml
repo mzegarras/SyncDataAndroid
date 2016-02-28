@@ -5,9 +5,13 @@
     tools:context=".PedidoFragment">
 
 
-
-    <TextView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"  android:text="Pruebas e dasdfjas asñ lfjaslkdf" />
+        android:layout_height="match_parent"
+        android:id="@+id/rvDetalle"
+        />
+
+
+
 
 </FrameLayout>
