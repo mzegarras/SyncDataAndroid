@@ -1,6 +1,7 @@
 package net.msonic.testsyncdata.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -61,10 +62,42 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
 
 
         ((CustomApplication) getActivity().getApplication()).getDiComponent().inject(this);
+        setHasOptionsMenu(true);
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.fragment_pedido_menu, menu);
 
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        if(item.getItemId()==R.id.action_add){
+
+            // close existing dialog fragments
+            FragmentManager manager = getFragmentManager();
+            Fragment frag = manager.findFragmentByTag("pedidoItemEdit");
+            if (frag != null) {
+                manager.beginTransaction().remove(frag).commit();
+            }
+
+            PedidoItemEdit pedidoItemEdit = new PedidoItemEdit();
+            pedidoItemEdit.show(manager, "pedidoItemEdit");
+
+            return true;
+
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
