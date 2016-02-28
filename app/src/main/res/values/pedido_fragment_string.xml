@@ -3,6 +3,11 @@
 
     <string name="pedido_fragment_title">TICKET DE VENTA</string>
 
+    <string name="pedido_fragment_producto">Producto</string>
+    <string name="pedido_fragment_cantidad">CANT</string>
+    <string name="pedido_fragment_subtotal">PRECIO</string>
+    <string name="pedido_fragment_impuesto">I.G.V</string>
+
     <string name="action_add">Add</string>
     <string name="action_remove">Remove</string>
     <string name="selected_count">%1$s selected</string>

@@ -1,17 +1,48 @@
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".PedidoFragment"
     android:background="@drawable/selector_item_light">
 
 
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+
+        <TextView android:layout_width="0dp" android:layout_weight="3" android:layout_height="wrap_content" android:text="@string/pedido_fragment_producto" android:textStyle="bold" />
+
+        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="@string/pedido_fragment_cantidad" android:textStyle="bold" android:gravity="right" />
+
+        <TextView android:layout_width="0dp" android:layout_weight="2" android:layout_height="wrap_content" android:text="@string/pedido_fragment_subtotal" android:textStyle="bold" android:gravity="right" />
+
+    </LinearLayout>
+
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@+id/rvDetalle" />
+
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView android:layout_width="0dp" android:layout_weight="4" android:layout_height="wrap_content" android:text="@string/pedido_fragment_subtotal" android:textStyle="bold" />
+        <TextView android:layout_width="0dp" android:layout_weight="2" android:layout_height="wrap_content" android:text="S/. 1,000.00" android:gravity="right"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView android:layout_width="0dp" android:layout_weight="4" android:layout_height="wrap_content" android:text="@string/pedido_fragment_impuesto" android:textStyle="bold" />
+        <TextView android:layout_width="0dp" android:layout_weight="2" android:layout_height="wrap_content" android:text="S/. 180.00" android:gravity="right"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView android:layout_width="0dp" android:layout_weight="4" android:layout_height="wrap_content" android:text="@string/pedido_fragment_impuesto" android:textStyle="bold" />
+        <TextView android:layout_width="0dp" android:layout_weight="2" android:layout_height="wrap_content" android:text="S/. 1,180.00" android:gravity="right" android:textStyle="bold"/>
+    </LinearLayout>
+
 
 
 
@@ -22,4 +53,4 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_dialog_email" /-->
-</FrameLayout>
+</LinearLayout>

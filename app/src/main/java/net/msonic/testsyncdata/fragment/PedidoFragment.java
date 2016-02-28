@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
@@ -301,12 +302,20 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
 
             PedidoItem pedidoItem = detalle.get(position);
 
-            holder.txtProducto.setText(pedidoItem.producto.name);
-            holder.txtPrecio.setText(String.format("%s", pedidoItem.precio));
+            holder.txtProducto.setText(String.format("%s %s", pedidoItem.producto.name,"1.0 KG x $1.50"));
+            holder.txtPrecio.setText(String.format("%s KG", pedidoItem.precio));
             holder.txtCantidad.setText(String.format("%s", pedidoItem.cantidad));
 
 
             holder.itemView.setActivated(selectedItems.get(position, false));
+
+
+            if(holder.itemView.isActivated()){
+                holder.lstButtons.setVisibility(View.VISIBLE);
+            }else{
+                holder.lstButtons.setVisibility(View.GONE);
+            }
+
 
             /*
             	//This "if-else" is just an example
@@ -367,6 +376,9 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
 
             @Bind(R.id.txtPrecio)
             TextView txtPrecio;
+
+            @Bind(R.id.lstButtons)
+            LinearLayout lstButtons;
 
 
             PersonViewHolder(View itemView) {
