@@ -7,12 +7,17 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
 import net.msonic.testsyncdata.CustomApplication;
 import net.msonic.testsyncdata.R;
@@ -27,7 +32,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class PedidoFragment extends Fragment implements View.OnClickListener,RecyclerView.OnItemTouchListener {
+public class PedidoFragment extends Fragment implements View.OnClickListener,RecyclerView.OnItemTouchListener,ActionMode.Callback {
 
 
     @Bind(R.id.rvDetalle)
@@ -35,6 +40,9 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
 
 
     GestureDetectorCompat gestureDetector;
+    ActionMode actionMode;
+    Adapter adapter;
+
 
     public PedidoFragment() {
         // Required empty public constructor
@@ -56,11 +64,6 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
 
 
     }
-
-
-    Adapter adapter;
-
-
 
 
     @Override
@@ -146,13 +149,14 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
         // item click
         int idx = rvDetalle.getChildAdapterPosition(v);
 
-        myToggleSelection(idx);
+        //myToggleSelection(idx);
 
-        /*if (actionMode != null) {
+        if (actionMode != null) {
             myToggleSelection(idx);
             return;
         }
-        DemoModel data = adapter.getItem(idx);
+
+        /*DemoModel data = adapter.getItem(idx);
         View innerContainer = view.findViewById(R.id.container_inner_item);
         innerContainer.setTransitionName(Constants.NAME_INNER_CONTAINER + "_" + data.id);
         Intent startIntent = new Intent(this, CardViewDemoActivity.class);
@@ -180,25 +184,83 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
 
     }
 
+    @Override
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+        MenuInflater inflater = actionMode.getMenuInflater();
+        inflater.inflate(R.menu.fragment_pedido_menu_cab, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.menu_delete:
+                List<Integer> selectedItemPositions = adapter.getSelectedItems();
+                int currPos;
+                for (int i = selectedItemPositions.size() - 1; i >= 0; i--) {
+                    currPos = selectedItemPositions.get(i);
+                    //RecyclerViewDemoApp.removeItemFromList(currPos);
+                    //adapter.removeData(currPos);
+                }
+                actionMode.finish();
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        this.actionMode = null;
+        adapter.clearSelections();
+    }
+
 
     private class RecyclerViewDemoOnGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
+            /*View view = rvDetalle.findChildViewUnder(e.getX(), e.getY());
+            onClick(view);*/
+
+
             View view = rvDetalle.findChildViewUnder(e.getX(), e.getY());
-            onClick(view);
+
+            if (actionMode == null) {
+                // Start the CAB using the ActionMode.Callback defined above
+                Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                actionMode = toolbar.startActionMode(PedidoFragment.this);
+            }
+
+            //actionMode = getActivity().startActionMode(PedidoFragment.this);
+            int idx = rvDetalle.getChildAdapterPosition(view);
+            myToggleSelection(idx);
+
+
+
             return super.onSingleTapConfirmed(e);
         }
 
         public void onLongPress(MotionEvent e) {
-            View view = rvDetalle.findChildViewUnder(e.getX(), e.getY());
+            /*View view = rvDetalle.findChildViewUnder(e.getX(), e.getY());
 
-            /*if (actionMode != null) {
+            if (actionMode != null) {
                 return;
             }
             // Start the CAB using the ActionMode.Callback defined above
-            actionMode = startActionMode(RecyclerViewDemoActivity.this);*/
+            Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+            actionMode = toolbar.startActionMode(PedidoFragment.this);
+
+            //actionMode = getActivity().startActionMode(PedidoFragment.this);
             int idx = rvDetalle.getChildAdapterPosition(view);
-            myToggleSelection(idx);
+            myToggleSelection(idx);*/
+
             super.onLongPress(e);
         }
     }
@@ -206,8 +268,8 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
 
     private void myToggleSelection(int idx) {
         adapter.toggleSelection(idx);
-        //String title = getString(R.string.selected_count, adapter.getSelectedItemCount());
-        //actionMode.setTitle(title);
+        String title = getString(R.string.selected_count, adapter.getSelectedItemCount());
+        actionMode.setTitle(title);
     }
 
 
@@ -286,6 +348,10 @@ public class PedidoFragment extends Fragment implements View.OnClickListener,Rec
                 items.add(selectedItems.keyAt(i));
             }
             return items;
+        }
+
+        public int getSelectedItemCount(){
+            return selectedItems.size();
         }
 
 
